@@ -1,0 +1,100 @@
+import(methods, PolynomF)
+importFrom(stats4, vcov, coef, confint, plot)
+importFrom(stats, arima.sim, filter, predict, rnorm, qnorm,
+           ts, ar, acf, pacf, acf2AR, ARMAacf, pchisq)
+importFrom(utils, capture.output)
+importFrom(graphics, abline, lines)
+
+importFrom(ltsa, DLAcfToAR, PredictionVariance, tacvfARMA)
+importFrom(FitAR, TacvfAR, TacvfMA, VarianceRacfAR, PacfDL, PacfToAR,
+           ARToPacf, ARToMA)
+importFrom(FitARMA, TacvfARMA, InformationMatrixARMA,
+           ImpulseCoefficientsARMA
+           ) # maybe also tccfAR
+
+importFrom(portes, LjungBox)
+
+
+##S3method(print, sarima)
+S3method(print, simSarimaFun)
+
+S3method(summary, SarimaFilter)
+S3method(summary, SarimaSpec)
+S3method(summary, SarimaModel)
+
+S3method(as.list, SarimaModel)
+S3method(as.list, ArmaModel)
+S3method(as.list, ArmaSpec)
+
+S3method(as.vector, Lagged)
+S3method(as.double, Lagged)
+S3method(as.matrix, Lagged)
+S3method(as.array , Lagged)
+
+S3method(as.vector, Lagged1d)
+S3method(as.matrix, Lagged2d)
+S3method(as.array , Lagged3d)
+
+S3method(length, Lagged)
+
+#S3method(coef, SampleAutocorrelations)
+#S3method(confint, SampleAutocorrelations)
+
+
+exportClassPattern("^[^\\.]")
+
+##exportPattern("^[[:alpha:]]+")
+export(
+    ## old
+    sim_sarima, # was: sarima.sim
+    fun.forecast,
+    ##print.sarima,
+    sarima.f,
+    ##sarima.mod,
+
+
+    prepareSimSarima,   #was: simenvSarima,
+    print.simSarimaFun,  #  print.simenvSarima,
+    ## from_sarima.mod,
+    ## from_modellist,
+
+    xarmaFilter,
+
+    armaacf, # from package pcts
+    armaccf_xe,
+
+    filterCoef,
+    filterOrder,
+    filterPoly,
+    filterPolyCoef,
+
+
+    autocovariances,
+    autocorrelations,
+    partialAutocovariances,
+    partialAutocorrelations,
+    partialVariances,
+
+    sigmaSq,
+
+    modelOrder,
+    modelPoly,
+    modelPolyCoef,
+
+    modelCoef,
+
+    ## acfLjungBoxTest,
+    acfIidTest,
+    whiteNoiseTest,
+
+    ## as.double.Lagged1d,
+
+    Lagged,
+
+    maxLag,
+
+    ## internal
+    rgarch1p1
+)
+
+

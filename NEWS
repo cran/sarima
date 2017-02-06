@@ -1,0 +1,68 @@
+Changes in Version 0.4-0
+
+   - first version for CRAN.
+   
+Changes in Version 0.3-6
+
+   - white noise tests based on acf and pacf and  corresponding plots.
+   - vignette.
+
+Changes in Version 0.3-5
+
+   - revamped "Lagged": introduced Lagged2d, etc.; mixed Ops, e.g. "Lagged" +
+     "vector", now work only if "vector" is of length one or multiple of the
+     length of e1@data has the same length as the vector.
+
+Changes in Version 0.3-4
+
+   - removed some old commented out code from sarima.org to reduce clutter.
+   - extensive changes and consolidation.
+
+Changes in Version 0.3-3
+
+   - streamlined SARIMA models and the functions based on old code.
+     Keeping the old code (commented out) for reference.
+
+Changes in Version 0.3-2
+
+   - defined the classes for autocorrelations and similar.
+   - autocorrelations() and similar now have a number of methods.
+   - passes 'R CMD check'. Most classes have only fake documentation
+     in VirtualMonicFilter-class.Rd.
+
+Changes in Version 0.3-0
+
+   - switched to package PolynomF (from polynom).
+   - new classes for models, including ARMA and SARIMA.
+   - R CMD check passes 9only a WARNING for undocumented objects and S$ methods.
+
+Changes in Version 0.2-x
+
+   - added new classes, substantial extension.
+   - renamed sarima.sim() to sim_sarima()
+
+Changes in Version 0.1-0
+
+   - updated and cleaned a bit the old code.
+
+Changes in Version 0.0-5
+
+   - removed argument "eps" from fun.forecast since it is ignored.
+
+Changes in Version 0.0-3
+
+   - sarima.mod now sets class "sarima" for its result.
+   - print method for "sarima" class.
+
+Changes in Version 0.0-2
+
+   - inserted examples from lectures and handouts from past years.
+
+Changes in Version 0.0-1
+
+   - created documentation using the comments in the source code.
+
+Changes in Version 0.0-0
+
+   - turned atssarima.r (written in 2006-2007 for course "Applied time series")
+     into a package.
