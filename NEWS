@@ -1,7 +1,16 @@
+Changes in Version 0.4-5
+
+   - moved "Lagged" to a separate package, "lagged".
+
+   - streamlined acfIidTest() and documented it properly.
+
+   - new vignette based on example in Chapter 7 of James Proberts' MMath
+     project.
+
 Changes in Version 0.4-0
 
    - first version for CRAN.
-   
+
 Changes in Version 0.3-6
 
    - white noise tests based on acf and pacf and  corresponding plots.

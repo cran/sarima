@@ -1,4 +1,4 @@
-import(methods, PolynomF)
+import(methods, PolynomF, lagged)
 importFrom(stats4, vcov, coef, confint, plot)
 importFrom(stats, arima.sim, filter, predict, rnorm, qnorm,
            ts, ar, acf, pacf, acf2AR, ARMAacf, pchisq)
@@ -26,16 +26,6 @@ S3method(as.list, SarimaModel)
 S3method(as.list, ArmaModel)
 S3method(as.list, ArmaSpec)
 
-S3method(as.vector, Lagged)
-S3method(as.double, Lagged)
-S3method(as.matrix, Lagged)
-S3method(as.array , Lagged)
-
-S3method(as.vector, Lagged1d)
-S3method(as.matrix, Lagged2d)
-S3method(as.array , Lagged3d)
-
-S3method(length, Lagged)
 
 #S3method(coef, SampleAutocorrelations)
 #S3method(confint, SampleAutocorrelations)
@@ -86,12 +76,7 @@ export(
     ## acfLjungBoxTest,
     acfIidTest,
     whiteNoiseTest,
-
-    ## as.double.Lagged1d,
-
-    Lagged,
-
-    maxLag,
+    # acfMaTest,
 
     ## internal
     rgarch1p1
