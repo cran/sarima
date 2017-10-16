@@ -1,19 +1,19 @@
-\name{summary.SarimaModel}
-\alias{summary.SarimaModel}
-\alias{summary.SarimaFilter}
-\alias{summary.SarimaSpec}
-%- Also NEED an '\alias' for EACH other topic documented here.
-\title{Methods for summary in package sarima}
-\description{Methods for summary in package sarima.}
+\name{modelCenter}
+\docType{methods}
+\alias{modelCenter}
+\alias{modelCenter-methods}
+\alias{modelCenter,InterceptSpec-method}
+
+\title{model center}
+\description{model center}
 \usage{
-\S3method{summary}{SarimaModel}(object, ...)
-\S3method{summary}{SarimaFilter}(object, ...)
-\S3method{summary}{SarimaSpec}(object, ...)
+modelCenter(object)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
-  \item{object}{an object from the corresponding class.}
-  \item{\dots}{further arguments for methods.}
+  \item{object}{an object
+%%     ~~Describe \code{object} here~~
+}
 }
 %\details{
 %%%  ~~ If necessary, more details than the description above ~~
@@ -25,14 +25,17 @@
 %%%  \item{comp2 }{Description of 'comp2'}
 %%% ...
 %}
+\section{Methods}{
+\describe{
+
+\item{\code{signature(object = "InterceptSpec")}}{
+%%  ~~describe this method here~~
+}
+}}
 %\references{
 %%% ~put references to the literature/web site here ~
 %}
 \author{Georgi N. Boshnakov}
-
-%\author{
-%%%  ~~who you are~~
-%}
 %\note{
 %%%  ~~further notes~~
 %}
@@ -44,7 +47,8 @@
 %}
 %\examples{
 %}
-%% Add one or more standard keywords, see file 'KEYWORDS' in the
-%% R documentation directory.
-%\keyword{ ~kwd1 }
+% Add one or more standard keywords, see file 'KEYWORDS' in the
+% R documentation directory.
+\keyword{methods}
+\keyword{ts}
 % use one of  RShowDoc("KEYWORDS")

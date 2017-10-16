@@ -34,9 +34,7 @@ rgarch1p1(n, alpha, beta, omega, n.skip = 100)
 %\references{
 %%% ~put references to the literature/web site here ~
 %}
-%\author{
-%%%  ~~who you are~~
-%}
+\author{Georgi N. Boshnakov}
 %\note{
 %%%  ~~further notes~~
 %}

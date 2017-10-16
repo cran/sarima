@@ -1,12 +1,18 @@
 \name{acfIidTest}
+\docType{methods}
 \alias{acfIidTest}
+\alias{acfIidTest-methods}
+\alias{acfIidTest,ANY-method}
+\alias{acfIidTest,missing-method}
+\alias{acfIidTest,SampleAutocorrelations-method}
+
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{Carry out IID tests using sample autocorrelations}
 \description{Carry out tests for IID from sample autocorrelations.}
 \usage{
 acfIidTest(acf, n, npar = 0, nlags = npar + 1,
-            method = c("LiMcLeod", "LjungBox", "BoxPierce"),
-            interval = 0.95, expandCI = TRUE)
+           method = c("LiMcLeod", "LjungBox", "BoxPierce"),
+           interval = 0.95, expandCI = TRUE, \dots)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -27,6 +33,7 @@ acfIidTest(acf, n, npar = 0, nlags = npar + 1,
     logical flag, if \code{TRUE} return a CI for each lag up to
     \code{max(nlags)}. Used only if CI's are requested.
   }
+  \item{...}{currently ignored.}
 }
 \details{
 
@@ -58,9 +65,33 @@ acfIidTest(acf, n, npar = 0, nlags = npar + 1,
   a list with components "test" and (if requested) "ci", as described in
   Details
 }
-%\references{
-%%% ~put references to the literature/web site here ~
-%}
+\section{Methods}{
+\describe{
+
+\item{\code{signature(acf = "ANY")}}{
+
+  In this method \code{acf} contains the autocorrelations.
+
+}
+
+\item{\code{signature(acf = "missing")}}{
+
+  The autocorrelations are computed from argument \code{x}.
+
+}
+
+\item{\code{signature(acf = "SampleAutocorrelations")}}{
+
+  This is a convenience method in which argument \code{n} is taken from
+  \code{acf} and thus does not need to be specified by the user.
+
+}
+}}
+
+\references{
+  \insertRef{Li2004diagnostic}{sarima}
+
+}
 \author{Georgi N. Boshnakov}
 %\note{
 %%%  ~~further notes~~
@@ -68,9 +99,11 @@ acfIidTest(acf, n, npar = 0, nlags = npar + 1,
 %
 %%% ~Make other sections like Warning with \section{Warning }{....} ~
 %
-%\seealso{
-%%% ~~objects to See Also as \code{\link{help}}, ~~~
-%}
+\seealso{
+  \code{\link{whiteNoiseTest}},
+  \code{\link{acfGarchTest}},
+  \code{\link{acfMaTest}}
+}
 \examples{
 ts1 <- rnorm(100)
 
@@ -87,10 +120,9 @@ class(ts1_acrf)  # "SampleAutocorrelations"
 whiteNoiseTest(ts1_acrf, h0 = "iid", nlags = c(5,10,20), method = "LiMcLeod")
 plot(ts1_acrf)
 
-
+## use 10% level of significance in the plot:
+plot(ts1_acrf, interval = 0.9)
 }
-% Add one or more standard keywords, see file 'KEYWORDS' in the
-% R documentation directory.
 \keyword{ts}
 \keyword{htest}
 % use one of  RShowDoc("KEYWORDS")

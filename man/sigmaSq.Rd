@@ -1,9 +1,8 @@
-\name{sigmaSq-methods}
+\name{sigmaSq}
 \docType{methods}
 \alias{sigmaSq}
 \alias{sigmaSq-methods}
-\alias{sigmaSq,ArmaModel-method}
-\alias{sigmaSq,SarimaSpec-method}
+\alias{sigmaSq,InterceptSpec-method}
 \title{Get the innovation variance of models}
 \description{Get the innovation variance of models.}
 \usage{
@@ -23,14 +22,13 @@ sigmaSq(object)
 }
 %\value{
 %}
+\author{Georgi N. Boshnakov}
 \section{Methods}{
 \describe{
 
-\item{\code{signature(object = "ArmaModel")}}{
+\item{\code{signature(object = "InterceptSpec")}}{
 %%  ~~describe this method here~~
 }
-\item{\code{signature(object = "SarimaSpec")}}{{
-%%  ~~describe this method here~~
-}
-}}}
+}}
 \keyword{methods}
+\keyword{ts}

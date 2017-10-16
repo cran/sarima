@@ -10,9 +10,8 @@
   residuals.
 }
 \usage{
-xarmaFilter(model, x = numeric(length(eps)), eps = numeric(length(x)),
-            from = NULL, whiten = FALSE, xcenter = NULL,
-            xintercept = NULL)
+xarmaFilter(model, x = NULL, eps = NULL, from = NULL, whiten = FALSE,
+            xcenter = NULL, xintercept = NULL)
 }
 \arguments{
   \item{x}{ the time series to be filtered, a vector. }
@@ -69,8 +68,18 @@ xarmaFilter(model, x = numeric(length(eps)), eps = numeric(length(x)),
   where \eqn{c_t}{c(t)} is the intercept (basically the sum of
   \code{intercept} with \code{xintercept}. The inverse
   filter is obtained by writing this as an equation expressing
-  \eqn{\varepsilon_t} in terms of the remaining quantities.
-
+  \eqn{\varepsilon_t} in terms of the remaining quantities:
+  \deqn{ \varepsilon_t
+    = - c_t
+      - \sum_{i=1}^{q} \theta(i)\varepsilon_{t-i}
+      - \sum_{i=1}^{p} \phi  (i)y          _{t-i}
+      + y_t
+    }{   e(t)
+    = - c(t)
+      - \sum_\{i=1\}^\{q\} theta(i)e(t-i)
+      - \sum_\{i=1\}^\{p\} phi(i) y(t-i)
+      + y(t)
+    }
   If \code{whiten = TRUE}, \code{xarmaFilter} uses the above formula to
   compute the filtered values of \code{x} for \code{t=from,...,n},
   i.e. whitening the time series if \code{eps} is white noise.  If
@@ -79,11 +88,10 @@ xarmaFilter(model, x = numeric(length(eps)), eps = numeric(length(x)),
   In both cases the first few values in \code{x} and/or \code{eps} are
   used as initial values.
 
-
   Essentially, the centering is subtracted from the series to obtain the
   centred series, say \code{y}. Then either \code{y} is filtered to
   obtain \code{eps} or the inverse filter is applied to obtain \code{y}
-  from \code{eps} finally the mean is added back to \code{y} and the
+  from \code{eps}. Finally the mean is added back to \code{y} and the
   result returned.
 
   The centering is formed from \code{model$center} and argument
@@ -101,50 +109,29 @@ xarmaFilter(model, x = numeric(length(eps)), eps = numeric(length(x)),
   \code{x} is returned.
 
   \code{xarmaFilter} can be used to simulate arma series with the
-  default value of \code{whiten=FALSE}. In this case \code{eps} is the
-  input series and \code{y} the output.
-  \deqn{ y_t
-    = c_t
-      + \sum_{i=1}^{p} \phi  (i)y          _{t-i}
-      + \sum_{i=1}^{q} \theta(i)\varepsilon_{t-i}
-      + \varepsilon_t
-    }{   y(t)
-    = c(t) + \sum_\{i=1\}^\{p\} phi(i) y(t-i)
-      + \sum_\{i=1\}^\{q\} theta(i)e(t-i)
-      + e(t)
-    }
+  default value of \code{whiten = FALSE}. In this case \code{eps} is the
+  input series and \code{y} the output:
   Then \code{model$center} and/or \code{xcenter} are added to \code{y}
   to form the output vector \code{x}.
 
   Residuals corresponding to a series \code{y} can be obtained by
-  setting \code{whiten=TRUE}. In this case \code{y} is the input series.
+  setting \code{whiten = TRUE}. In this case \code{y} is the input series.
   The elements of the output vector \code{eps} are calculated by the
-  formula:
-  \deqn{ \varepsilon_t
-    = - c_t
-      - \sum_{i=1}^{q} \theta(i)\varepsilon_{t-i}
-      - \sum_{i=1}^{p} \phi  (i)y          _{t-i}
-      + y_t
-    }{   e(t)
-    = - c(t)
-      - \sum_\{i=1\}^\{q\} theta(i)e(t-i)
-      - \sum_\{i=1\}^\{p\} phi(i) y(t-i)
-      + y(t)
-    }
+  formula for \eqn{\varepsilon_{t}}{e(t)} given above.
   There is no need in this case to restore \code{x} since \code{eps} is
   returned.
 
   In both cases any necessary initial values are assumed to be already
-  in the vectors. If \code{from} is not supplied it is set to
-  \code{max(p,q)+1}
+  in the vectors. Argument \code{from} should be not smaller than the
+  default value \code{max(p,q)+1}.
 
   \code{xarmaFilter} calls the lower level function \code{coreXarmaFilter}
   to do the computation.
 
 }
 \value{
-  The filtered series: the modified \code{x} if \code{whiten=FALSE}, the
-  modified \code{eps} if \code{whiten=TRUE}.
+  The filtered series: the modified \code{x} if \code{whiten = FALSE}, the
+  modified \code{eps} if \code{whiten = TRUE}.
 }
 %\references{ }
 \author{Georgi N. Boshnakov}
@@ -177,9 +164,11 @@ ap.Ainv <- xarmaFilter(model1, x = ap, eps = ap.A, whiten = FALSE)
 AirPassengers - ap.Ainv # = 0
 
 ## compare with sarima.f (an old function)
+## compute predictions starting at from = 14
 pred1 <- sarima.f(past = AirPassengers[1:13], n = 131, ar = model1$ar, ma = model1$ma)
-pred2 <- xarmaFilter(model1, x = ap, eps = numeric(length(AirPassengers)), whiten = FALSE)
+pred2 <- xarmaFilter(model1, x = ap, whiten = FALSE)
 pred2 <- pred2[-(1:13)]
 all(pred1 == pred2) ##TRUE
 }
 \keyword{filter}
+\keyword{ts}

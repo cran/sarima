@@ -1,3 +1,44 @@
+Changes in Version 0.5-2
+
+   - plot of acf tests now uses different 'lty' so that the confidence limits
+     under iid and garch nulls are visually distinguishable in black and white
+     printouts.
+
+   - plot of acf tests now accepts argument 'interval' to produce rejection
+     limits for levels other than the default 95%.
+
+   - started to add references to the documentation.
+
+   - for armaacf() and armaccf_xe() the innovation variance in argument 'model'
+     is now called 'sigma2' (the old 'sigmasq' still works but is deprecated).
+
+   - a number of corrections and additions to the documentation.
+
+   - additional examples.
+
+
+Changes in Version 0.5-1
+
+   - SarimaModel now inherits from VirtualSarimaModel (it was inheriting from
+     VirtualFilterModel. On its own, this is invisible to the user. It didn't
+     invalidate existing objects either.
+
+   - new class "VirtualIntegratedModel".
+
+   - new functions nUnitRoots() and isStationaryModel.
+
+   - further streamlining.
+
+
+Changes in Version 0.5-0
+
+   - exported functions related to Bartlett's formula (they were there in
+     version 0.4-5, under different names).
+
+   - substantial work on SARIMA models and their documentation.
+
+   - increasing the version number before some streamlining of class SarimaModel.
+
 Changes in Version 0.4-5
 
    - moved "Lagged" to a separate package, "lagged".
@@ -6,6 +47,9 @@ Changes in Version 0.4-5
 
    - new vignette based on example in Chapter 7 of James Proberts' MMath
      project.
+
+   - first submission to CRAN.
+
 
 Changes in Version 0.4-0
 

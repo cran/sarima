@@ -10,13 +10,12 @@ prepareSimSarima(model, x = NULL, eps = NULL, n, n.start = NA,
 
 \S3method{print}{simSarimaFun}(x, ...)
 }
-%- maybe also 'usage' for other objects documented here.
 \arguments{
-  \item{model}{a list specifying the SARIMA model.}
+  \item{model}{an object from a suitable class or a list, see Details.}
   \item{x}{
 
-    initial/before values of the time series, a list or a numeric
-    vector, see Details.
+    initial/before values of the time series, a list, a numeric
+    vector or time series, see Details.
 
   }
   \item{eps}{
@@ -31,7 +30,7 @@ prepareSimSarima(model, x = NULL, eps = NULL, n, n.start = NA,
     infer it from \code{x} and \code{eps}.
 
   }
-  \item{n.start}{number of burin-in observations.
+  \item{n.start}{number of burn-in observations.
   }
   \item{xintercept}{
 
@@ -53,6 +52,26 @@ prepareSimSarima(model, x = NULL, eps = NULL, n, n.start = NA,
   deviation. So, it is expected that the random number generator
   simulates from a standardised distribution.
 
+  Argument \code{model} can be from any class representing models in the
+  SARIMA family, such as "SarimaModel", or a list with components
+  suitable to be passed to =new()= for such models.
+
+  The canonical form of argument \code{x} u is a list with components
+  "before", "init" and "main". If any of these components is missing or
+  NULL, it is filled suitably.  Any other components are ignored. If
+  \code{x} is not a list, it is put in component "main". Conceptually,
+  the three components are concatenated in the given order, the
+  simulated values are put in "main" ("before" and "init" are not
+  changed), the "before" part is dropped and rest is returned. In
+  effect, "before" and "init" can be viewed as initial values but "init"
+  is considered part of the generated series.
+
+  The format for \code{eps} is the same as that of \code{x}. The lengths of
+  missing components in \code{x} are inferred from the corresponding
+  components of \code{eps}, and vice versa.
+
+
+
   \code{print.simSarimaFun} is a print method for the objects generated
   by \code{prepareSimSarima}.
 }
@@ -62,9 +81,7 @@ prepareSimSarima(model, x = NULL, eps = NULL, n, n.start = NA,
 %\references{
 %%% ~put references to the literature/web site here ~
 %}
-%\author{
-%%%  ~~who you are~~
-%}
+\author{Georgi N. Boshnakov}
 %\note{
 %%%  ~~further notes~~
 %}
@@ -90,16 +107,7 @@ fs3 <- prepareSimSarima(mo3, x = list(before = rep(0,6)),  n = 100)
 tmp3 <- fs3()
 plot(ts(tmp3))
 }
-% Add one or more standard keywords, see file 'KEYWORDS' in the
-% R documentation directory.
 \keyword{simulation}
 \keyword{arima}
 \keyword{sarima}
 % use one of  RShowDoc("KEYWORDS")
-
-
-
-
-
-
-

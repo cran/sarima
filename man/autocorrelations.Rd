@@ -8,7 +8,7 @@
 \description{
 
   Generic functions for computation of autocorrelations,
-  autocovariances and related qqunatities.
+  autocovariances and related quantities.
 
 }
 \usage{

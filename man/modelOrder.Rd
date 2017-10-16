@@ -66,6 +66,8 @@ modelPolyCoef(object, convention, lag_0 = TRUE, \dots)
 %\references{
 %%% ~put references to the literature/web site here ~
 %}
+\author{Georgi N. Boshnakov}
+
 %\author{
 %%%  ~~who you are~~
 %}
@@ -82,8 +84,5 @@ modelPolyCoef(object, convention, lag_0 = TRUE, \dots)
 %}
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
-\keyword{ ~kwd1 }
+\keyword{ts}
 % use one of  RShowDoc("KEYWORDS")
-
-
-

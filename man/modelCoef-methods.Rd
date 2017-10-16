@@ -16,16 +16,23 @@
 \alias{modelCoef,PartialAutocorrelations,Autocorrelations-method}
 \alias{modelCoef,SarimaModel,ArFilter-method}
 \alias{modelCoef,SarimaModel,ArmaFilter-method}
-\alias{modelCoef,SarimaModel,character-method}
+%\alias{modelCoef,SarimaModel,character-method}
 \alias{modelCoef,SarimaModel,MaFilter-method}
-\alias{modelCoef,SarimaModel,missing-method}
+%\alias{modelCoef,SarimaModel,missing-method}
 \alias{modelCoef,SarimaModel,SarimaFilter-method}
-\alias{modelCoef,VirtualArmaModel,character-method}
-\alias{modelCoef,VirtualArmaModel,missing-method}
+%\alias{modelCoef,VirtualArmaModel,character-method}
+%\alias{modelCoef,VirtualArmaModel,missing-method}
 \alias{modelCoef,VirtualAutocovariances,character-method}
 \alias{modelCoef,VirtualAutocovariances,missing-method}
 \alias{modelCoef,VirtualAutocovariances,VirtualAutocovariances-method}
 \alias{modelCoef,PartialAutocovariances,PartialAutocorrelations-method}
+\alias{modelCoef,SarimaModel,ArModel-method}
+\alias{modelCoef,SarimaModel,MaModel-method}
+\alias{modelCoef,VirtualFilterModel,BD-method}
+\alias{modelCoef,VirtualFilterModel,BJ-method}
+\alias{modelCoef,VirtualFilterModel,character-method}
+\alias{modelCoef,VirtualFilterModel,missing-method}
+\alias{modelCoef,VirtualFilterModel,SP-method}
 \title{Methods for generic function modelCoef}
 \description{Methods for generic function modelCoef.}
 \section{Methods}{
@@ -91,29 +98,16 @@
 %%  ~~describe this method here~~
 }
 
-\item{\code{signature(object = "SarimaModel", convention = "character")}}{
-%%  ~~describe this method here~~
-}
 
 \item{\code{signature(object = "SarimaModel", convention = "MaFilter")}}{
 %%  ~~describe this method here~~
 }
 
-\item{\code{signature(object = "SarimaModel", convention = "missing")}}{
-%%  ~~describe this method here~~
-}
 
 \item{\code{signature(object = "SarimaModel", convention = "SarimaFilter")}}{
 %%  ~~describe this method here~~
 }
 
-\item{\code{signature(object = "VirtualArmaModel", convention = "character")}}{
-%%  ~~describe this method here~~
-}
-
-\item{\code{signature(object = "VirtualArmaModel", convention = "missing")}}{
-%%  ~~describe this method here~~
-}
 
 \item{\code{signature(object = "VirtualAutocovariances", convention = "character")}}{
 %%  ~~describe this method here~~
@@ -126,10 +120,31 @@
 \item{\code{signature(object = "VirtualAutocovariances", convention = "VirtualAutocovariances")}}{
 %%  ~~describe this method here~~
 }
-\item{\code{signature(object = "PartialAutocovariances", 
+\item{\code{signature(object = "PartialAutocovariances",
           convention = "PartialAutocorrelations")}}{{
 %%  ~~describe this method here~~
 }
+}\item{\code{signature(object = "SarimaModel", convention = "ArModel")}}{{
+%%  ~~describe this method here~~
+}
+}\item{\code{signature(object = "SarimaModel", convention = "MaModel")}}{{
+%%  ~~describe this method here~~
+}
+}\item{\code{signature(object = "VirtualFilterModel", convention = "BD")}}{{
+%%  ~~describe this method here~~
+}
+}\item{\code{signature(object = "VirtualFilterModel", convention = "BJ")}}{{
+%%  ~~describe this method here~~
+}
+}\item{\code{signature(object = "VirtualFilterModel", convention = "character")}}{{
+%%  ~~describe this method here~~
+}
+}\item{\code{signature(object = "VirtualFilterModel", convention = "missing")}}{{
+%%  ~~describe this method here~~
+}
+}\item{\code{signature(object = "VirtualFilterModel", convention = "SP")}}{{
+%%  ~~describe this method here~~
+}
 }}}
+\author{Georgi N. Boshnakov}
 \keyword{methods}
-%\keyword{}

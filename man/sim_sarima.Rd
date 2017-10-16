@@ -15,15 +15,24 @@ sim_sarima(model, n = NA, rand.gen = rnorm, n.start = NA, x, eps,
   \item{rand.gen}{
     random number generator for the innovations.
   }
+  \item{n}{length of the time series.}
+  \item{n.start}{number of burn-in observations.}
+  \item{x}{
+    initial/before values of the time series, a list, a numeric
+    vector or time series, see Details.
+  }
+  \item{eps}{
+    initial/before values of the innovations, a list or a numeric
+    vector, see Details.
+  }
+  \item{xintercept}{
+    non-constant intercept which may represent trend or covariate
+    effects.
+  }
+  \item{xcenter}{currently ignored.}
   \item{\dots}{additional arguments for \code{arima.sim} and
     \code{rand.gen}, see `Details'.
   }
-  \item{n}{~~ TODO: describe this argument. ~~}
-  \item{n.start}{~~ TODO: describe this argument. ~~}
-  \item{x}{~~ TODO: describe this argument. ~~}
-  \item{eps}{~~ TODO: describe this argument. ~~}
-  \item{xcenter}{~~ TODO: describe this argument. ~~}
-  \item{xintercept}{~~ TODO: describe this argument. ~~}
 }
 \details{
 
@@ -46,7 +55,7 @@ sim_sarima(model, n = NA, rand.gen = rnorm, n.start = NA, x, eps,
     \item{sma}{seasonal ma parameters}
   }
 
-  Additional arguments for \code{rand.gen}  may be specified 
+  Additional arguments for \code{rand.gen}  may be specified
   via the "\dots" argument.
   In particular, the length of the generated series is specified with
   argument \code{n}. Arguments for \code{rand.gen} can also be passed
@@ -82,40 +91,45 @@ sim_sarima(model, n = NA, rand.gen = rnorm, n.start = NA, x, eps,
 \examples{
 require("PolynomF") # package "sarima" imports it, so should not be absent here.
 
-x <- sim_sarima(n=144, model = list(ma=0.8))             # MA(1)
+x <- sim_sarima(n=144, model = list(ma=0.8))               # MA(1)
 x <- sim_sarima(n=144, model = list(ar=0.8))               # AR(1)
 
-x <- sim_sarima(n=144, model = list(ar=c(rep(0,11),0.8)))   # SAR(1), 12  seasons
-x <- sim_sarima(n=144, model = list(ma=c(rep(0,11),0.8))) # SMA(1)
+x <- sim_sarima(n=144, model = list(ar=c(rep(0,11),0.8)))  # SAR(1), 12  seasons
+x <- sim_sarima(n=144, model = list(ma=c(rep(0,11),0.8)))  # SMA(1)
 
-                                          # more enlightened SAR(1) and SMA(1)
-x <-sim_sarima(n=144,model=list(sar=0.8, nseasons=12))    # SAR(1), 12  seasons
-x <-sim_sarima(n=144,model=list(sma=0.8, nseasons=12))  # SMA(1)
+                                  # more enlightened SAR(1) and SMA(1)
+x <- sim_sarima(n=144,model=list(sar=0.8, nseasons=12, sigma2 = 1))  # SAR(1), 12 seasons
+x <- sim_sarima(n=144,model=list(sma=0.8, nseasons=12, sigma2 = 1))  # SMA(1)
 
-x <- sim_sarima(n=144, model = list(iorder=1)) # (1-B)X_t = e_t (random walk)
+x <- sim_sarima(n=144, model = list(iorder=1, sigma2 = 1)) # (1-B)X_t = e_t (random walk)
 acf(x)
 acf(diff(x))
 
-x <-sim_sarima(n=144, model = list(iorder=2))            # (1-B)^2 X_t = e_t
-x <-sim_sarima(n=144, model = list(siorder=1, nseasons=12)) # (1-B)^{12} X_t = e_t
+x <-sim_sarima(n=144, model = list(iorder=2, sigma2 = 1))  # (1-B)^2 X_t = e_t
+x <-sim_sarima(n=144, model = list(siorder=1,
+                                   nseasons=12, sigma2 = 1)) # (1-B)^{12} X_t = e_t
 
-x <- sim_sarima(n=144, model = list(iorder=1, siorder=1, nseasons=12))
-x <- sim_sarima(n=144, model = list(ma=0.4, iorder=1, siorder=1, nseasons=12))
-x <- sim_sarima(n=144, model = list(ma=0.4, sma=0.7, iorder=1, siorder=1, nseasons=12))
+x <- sim_sarima(n=144, model = list(iorder=1, siorder=1,
+                                    nseasons=12, sigma2 = 1))
+x <- sim_sarima(n=144, model = list(ma=0.4, iorder=1, siorder=1,
+                                    nseasons=12, sigma2 = 1))
+x <- sim_sarima(n=144, model = list(ma=0.4, sma=0.7, iorder=1, siorder=1,
+                                    nseasons=12, sigma2 = 1))
 
 x <- sim_sarima(n=144, model = list(ar=c(1.2,-0.8), ma=0.4,
-                                    sar=0.3, sma=0.7, iorder=1,siorder=1,nseasons=12))
+                                    sar=0.3, sma=0.7, iorder=1, siorder=1,
+                                    nseasons=12, sigma2 = 1))
 
-x <- sim_sarima(n=144, model = list(iorder=1, siorder=1, nseasons=12),
+x <- sim_sarima(n=144, model = list(iorder=1, siorder=1,
+                                    nseasons=12, sigma2 = 1),
                 x = list(init=AirPassengers[1:13]))
-
 
 p <- polynom(c(1,-1.2,0.8))
 solve(p)
 abs(solve(p))
 
-sim_sarima(n=144, model = list(ar=c(1.2,-0.8), ma=0.4,
-                               sar=0.3, sma=0.7, iorder=1, siorder=1, nseasons=12))
+sim_sarima(n=144, model = list(ar=c(1.2,-0.8), ma=0.4, sar=0.3, sma=0.7,
+                               iorder=1, siorder=1, nseasons=12))
 
 x <- sim_sarima(n=144, model=list(ma=0.4, iorder=1, siorder=1, nseasons=12))
 acf(x, lag.max=48)
@@ -128,7 +142,8 @@ acf(x, lag.max=48)
 x <- sim_sarima(n=144, model=list(sar=-0.4, iorder=0, siorder=0, nseasons=12))
 acf(x, lag.max=48)
 
-x <- sim_sarima(n=144, model=list(ar=c(1.2, -0.8), ma=0.4,
-                                  sar=0.3, sma=0.7, iorder=1, siorder=1, nseasons=12))
+x <- sim_sarima(n=144, model=list(ar=c(1.2, -0.8), ma=0.4, sar=0.3, sma=0.7,
+                                  iorder=1, siorder=1, nseasons=12))
 }
-\keyword{ ts }
+\keyword{ts}
+\keyword{datagen}

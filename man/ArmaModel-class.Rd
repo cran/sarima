@@ -19,9 +19,13 @@
   \code{new("ArmaModel", ..., ar, ma, sar, sma, mean)}.
 
   Classes \code{"ArModel"} and \code{"MaModel"} are subclasses of
-  \code{"ArmaModel"} with the corresponding order always zero. 
+  \code{"ArmaModel"} with the corresponding order always zero.
 
-%%  ~~ describe objects here ~~ 
+
+  See also \code{\link{coerce-methods}} for further ways to create
+  objects from these classes.
+
+%%  ~~ describe objects here ~~
 }
 \section{Slots}{
   \describe{
@@ -55,19 +59,17 @@ Class \code{"\linkS4class{VirtualMonicFilter}"}, by class "ArmaSpec", distance 4
 %\references{
 %%%  ~~put references to the literature/web site here~~
 %}
-%\author{
-%%%  ~~who you are~~
-%}
+\author{Georgi N. Boshnakov}
+
 %\note{
 %%%  ~~further notes~~
 %}
 %
 %%% ~Make other sections like Warning with \section{Warning }{....} ~
 %
-%\seealso{
-%%%  ~~objects to See Also as \code{\link{~~fun~~}}, ~~~
-%%%  ~~or \code{\linkS4class{CLASSNAME}} for links to other classes ~~~
-%}
+\seealso{
+  \code{\link{coerce-methods}}
+}
 \examples{
 arma1p1 <- new("ArmaModel", ar = 0.5, ma = 0.9, sigma2 = 1)
 autocovariances(arma1p1, maxlag = 10)
@@ -88,10 +90,11 @@ new("ArmaModel", ar = 0.5, ma = 0.9, mean = 1.23)
 ## (the mean is not equal to the intercept in this case)
 new("ArmaModel", ar = 0.5, ma = 0.9, center = 1.23, intercept = 2)
 
-## Don't use 'mean' together with 'cener' and/or 'intercept'.
+## Don't use 'mean' together with 'center' and/or 'intercept'.
 ##    new("ArmaModel", ar = 0.5, ma = 0.9, center = 1.23, mean  = 4)
 ##    new("ArmaModel", ar = 0.5, ma = 0.9, intercept = 2, mean  = 4)
-## Both give error message: 
+## Both give error message:
 ##   Use argument 'mean' only when 'center' and 'intercept' are missing or zero
 }
 \keyword{classes}
+\keyword{ts}

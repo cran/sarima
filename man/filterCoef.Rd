@@ -12,7 +12,7 @@
 \description{
 
   Coefficients and other basic properties of filters.
-  
+
 }
 \usage{
 filterCoef(object, convention, \dots)
@@ -34,7 +34,7 @@ filterPolyCoef(object, lag_0 = TRUE, \dots)
 
   Generic functions to extract basic properties of filters:
   \code{filterCoef} returns coefficients,
-  \code{filterOrder} returns the order, 
+  \code{filterOrder} returns the order,
   \code{filterPoly}, returns the characteristic polynomial,
   \code{filterPolyCoef} gives the coefficients of the characteristic
   polynomial.
@@ -52,20 +52,55 @@ filterPolyCoef(object, lag_0 = TRUE, \dots)
 %\references{
 %%% ~put references to the literature/web site here ~
 %}
-%\author{
-%%%  ~~who you are~~
-%}
-%\note{
-%%%  ~~further notes~~
-%}
+\author{Georgi N. Boshnakov}
+\note{
+  The \code{filterXXX()} functions are somewhat low level and
+  technical. They should be rarely needed in routine work.
+}
 %
 %%% ~Make other sections like Warning with \section{Warning }{....} ~
 %
-%\seealso{
-%%% ~~objects to See Also as \code{\link{help}}, ~~~
-%}
-%\examples{
-%}
-% Add one or more standard keywords, see file 'KEYWORDS' in the
-% R documentation directory.
-\keyword{ ~kwd1 }
+\seealso{
+  \code{modelOrder},
+  \code{modelCoef},
+  \code{modePoly},
+  \code{modePolyCoef},
+  for higher level alternatives
+}
+\examples{
+filterPoly(as(c(0.3, 0.5), "BJFilter"))   # 1 - 0.3*x - 0.5*x^2
+filterPoly(as(c(0.3, 0.5), "SPFilter"))   # 1 + 0.3*x + 0.5*x^2
+
+## now two representations of the same filter:
+fi1 <- as(c(0.3, 0.5), "BJFilter")
+fi2 <- as(c(-0.3, -0.5), "SPFilter")
+identical(fi2, fi1) # FALSE, but
+## fi1 and fi2 represent the same filter, eg. same ch. polynomials:
+filterPoly(fi1)
+filterPoly(fi2)
+identical(filterPolyCoef(fi2), filterPolyCoef(fi1))
+
+# same as above, using new()
+fi1a <- new("BJFilter", coef = c(0.3, 0.5))
+identical(fi1a, fi1) # TRUE
+
+fi2a <- new("SPFilter", coef = c(-0.3, -0.5))
+identical(fi2a, fi2) # TRUE
+
+## conversion by as() changes the internal representation
+## but represents the same filter:
+identical(as(fi1, "SPFilter"), fi2) # TRUE
+
+c(filterOrder(fi1), filterOrder(fi2))
+
+## these give the internally stored coefficients:
+filterCoef(fi1)
+filterCoef(fi2)
+
+## with argument 'convention' the result doesn't depend
+## on the internal representation:
+co1 <- filterCoef(fi1, convention = "SP")
+co2 <- filterCoef(fi2, convention = "SP")
+identical(co1, co2) # TRUE
+}
+\keyword{ts}

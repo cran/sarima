@@ -392,6 +392,15 @@ setMethod("autocorrelations",
     }
 )
 
+setMethod("autocorrelations",
+    signature(x = "VirtualSarimaModel", maxlag = "ANY", lag_0 = "missing"),
+    function (x, maxlag, ...)
+    {
+        arma <- as(x, "ArmaModel") # should give error if x is non-sttionary
+        autocorrelations(arma, maxlag = maxlag, ...)
+    }
+)
+
 setMethod("partialAutocorrelations",
           signature(x = "ts", maxlag = "ANY", lag_0 = "missing"),
           function (x, maxlag, ...)
@@ -758,7 +767,7 @@ setMethod("modelCoef", c("PartialAutocovariances", "PartialAutocorrelations"),
 ##
 acfIidTest <- function(acf, n, npar = 0, nlags = npar + 1,
                        method = c("LiMcLeod", "LjungBox", "BoxPierce"),
-                       interval = 0.95, expandCI = TRUE){
+                       interval = 0.95, expandCI = TRUE, ...){
     method <- match.arg(method)
     maxlag <- max(nlags)
     usedLags <- 1:maxlag
@@ -798,6 +807,64 @@ acfIidTest <- function(acf, n, npar = 0, nlags = npar + 1,
         int <- cbind(int, - int)
         res$ci <- int
 	attr(res$ci, "level") <- interval
+    }
+
+    res
+}
+
+setGeneric("acfIidTest")
+
+setMethod("acfIidTest", "SampleAutocorrelations",
+          function(acf, n, npar, nlags, method, interval = 0.95, x){
+              if(missing(n))
+                  n <- acf@n
+              else
+                  if(n != acf@n){
+                      ## only warning to allow 'what-if use.
+                      warning("argument 'n' is not equal to slot 'n' of the autocorrelations")
+                  }
+              callNextMethod(acf, n = n, nlags = nlags, method = method, interval = interval)
+          })
+
+setMethod("acfIidTest", "missing",
+          function(acf, n, npar, nlags, method, interval = 0.95, x){
+              if(missing(n))
+                  n <- length(x)
+              acf <- autocorrelations(x, maxlag = max(nlags))
+              acfIidTest(acf, n = n, nlags = nlags, method = method, interval = interval)
+          })
+
+acfMaTest <- function(acf, ma,  n, nlags,
+                       interval = 0.95){
+    maxlag <- max(nlags)
+    usedLags <- 1:maxlag
+
+    W <- nvcovOfAcfBD(acf, ma = ma, maxlag = maxlag)
+
+    Q <- numeric(length(nlags))
+    for(i in seq(along = nlags)){
+        h <- nlags[i]
+        la <- (ma + 1):h
+        rho <- acf[la]
+        stat <- rho %*% solve(W[la,la]) %*% rho
+        Q[i] <- stat / n
+    }
+
+    df <- nlags - ma
+
+    pval <- pchisq(Q, df = df, lower.tail = FALSE)
+
+    wrk <- cbind(ChiSq = Q, DF = df, pvalue = pval)
+    attr(wrk, "method") <- paste0("Ma(", ma, ") Test")
+    res <- list(test = wrk)
+
+    if(!is.null(interval)){
+        lq <- qnorm((1 - interval) / 2, sd = sqrt(diag(W)))
+        int <- lq / sqrt(n)
+
+        int <- cbind(int, - int)
+        res$ci <- int
+        attr(res$ci, "level") <- interval
     }
 
     res
@@ -845,7 +912,7 @@ acfIidTest <- function(acf, n, npar = 0, nlags = npar + 1,
     cbind(Lag = lags, StdError = ses) #  todo: include 'Estimate = cf[parm]'
 }
 
-.wn_test_garch <- function(acr, x, nlags, interval = 0.95){
+acfGarchTest <- function(acr, x, nlags, interval = 0.95){
     v <- .wnacf_asycov_garch(x, maxlag = max(nlags))
          # the formulas in the book multiply by n, since Gamma is 'n times asy.cov.'
          #    n <- length(x)
@@ -866,47 +933,22 @@ acfIidTest <- function(acf, n, npar = 0, nlags = npar + 1,
     res
 }
 
-.wn_test_iid <- function(acr, x, nlags, method, n, interval = 0.95){
-
-    ## TODO: this is temporary patch, need a method
-    if(is(acr, "SampleAutocorrelations")){
-        if(missing(n)){
-            n <- acr@n
-        }else{
-            if(n != acr@n)
-                ## only warning to allow 'what-if use.
-                warning("argument 'n' is not equal to slot 'n' of the autocorrelations")
-        }
-    }else if(missing(n))
-        n <- length(x)
-
-    ## TODO: add other methods here.
-    acfIidTest(acr, n = n, nlags = nlags, method = method, interval = interval)
-}
-
 whiteNoiseTest <- function(object, h0, ...){
     switch(h0,
            "iid" = {
-               .wn_test_iid(object, ...)
+               acfIidTest(object, ...)
            },
            "garch" = {
-               .wn_test_garch(object, ...) # no method yet for this case
+               acfGarchTest(object, ...) # no method yet for this case
            },
            ##default
            stop("Unrecognised null hypothesis")
            )
 }
 
-setGeneric("whiteNoiseTest")
-
 setMethod("coef", "SampleAutocorrelations",
           function (object, ...){
-              res <- object[]
-
-              if(is.null(names(res)))
-                  ## TODO: currently scalar case only;
-                  names(res) <- paste0("Lag_", 0:maxLag(object))
-              res
+              dataWithLagNames(object)
           }
           )
 
@@ -924,9 +966,7 @@ setMethod("vcov", "SampleAutocorrelations",
           }
           )
 
-# stats:::format.perc() is not exported, copy it here.
-.stats.format.perc <- function (probs, digits)
-    paste(format(100 * probs, trim = TRUE, scientific = FALSE, digits = digits), "%")
+# setMethod("diagOfVcov", "SampleAutocorrelations",
 
 setMethod("confint", "SampleAutocorrelations",
           function (object, parm, level = 0.95, se = FALSE, maxlag, ...){
@@ -962,14 +1002,15 @@ setMethod("confint", "SampleAutocorrelations",
           }
           )
 
-.plot.acf.test <- function (x, y, data, method = "LiMcLeod", nlags, legend = TRUE,
-                            ylim = c(NA, NA), ylim.fac = 1.2,
+.plot.acf.test <- function (x, y, data, method = "LiMcLeod", nlags, interval = 0.95,
+                            legend = TRUE, ylim = c(NA, NA), ylim.fac = 1.2,
                             xlab = "Lag",
+			    ci.lty = 2:3, # 2017-08-29 new, corresponding changes below
                             ...){
     if(missing(nlags))
         nlags <- seq(from = maxLag(x), to = 1, by = -5)
 
-    x.iid <- whiteNoiseTest(x, h0 = "iid", n = x@n, # x = data,
+    x.iid <- whiteNoiseTest(x, h0 = "iid", n = x@n, interval = interval, # x = data,
                             method = method, nlags = nlags)
     ci <- x.iid$ci
     y <- cbind(1:nrow(ci), x.iid$ci, Estimate = x[1:nrow(ci)])
@@ -979,7 +1020,8 @@ setMethod("confint", "SampleAutocorrelations",
     if(is.na(ylim[2])) ylim.loc[2] <- max(y[, 3])
 
     if(!missing(data)){
-        x.garch <- whiteNoiseTest(x, h0 = "garch", x = data, nlags = nlags)
+        x.garch <- whiteNoiseTest(x, h0 = "garch", x = data, nlags = nlags,
+                                     interval = interval)
         ylim <- c(min(ylim[1], x.garch$ci[ , 1]),
                   max(ylim[2], x.garch$ci[ , 2])
                   )
@@ -998,7 +1040,7 @@ setMethod("confint", "SampleAutocorrelations",
             ## lag_0 = TRUE,
             ylim = ylim,
             ci.col = "brown",
-            ci.lty = 2,
+            ci.lty = ci.lty[1],
             xlab = xlab, ## xlab = colnames(x)[1],
             ## ylab = "Estimate & CI",
             ## ann = TRUE,
@@ -1007,51 +1049,18 @@ setMethod("confint", "SampleAutocorrelations",
 
     if(!missing(data)){
         x.garch <- whiteNoiseTest(x, h0 = "garch", x = data, nlags = nlags)
-        .cilines(1:nrow(x.garch$ci), x.garch$ci, col = "blue")
+        .cilines(1:nrow(x.garch$ci), x.garch$ci, col = "blue", lty = ci.lty[2])
     }
 
     ## see ?legend, example thanks to Uwe Ligges
     if(legend){
         legend("topright", legend = c("H0: iid", "H0: garch"),
-               col = c("brown ", "blue"), lty = 2 )
+               col = c("brown ", "blue"), lty = ci.lty )
     }
 
 
     invisible()
 }
-
-setMethod("plot", c(x = "SampleAutocorrelations", y = "matrix"),
-          function (x, y, main = "Acf test", ...){
-
-              .ciplot(x = y,
-                    lag_0 = FALSE, ## ylim = c(-1, 1),
-                    main = main,
-                    ## ci.col = "blue", ci.lty = 2,
-                    ## xlab = colnames(x)[1],
-                    ## ylab = "Estimate & CI",
-                    ## ann = TRUE,
-                    ...)
-              invisible()
-          }
-          )
-
-setMethod("plot", c(x = "SampleAutocorrelations", y = "missing"),
-          function (x, y,
-                    # data, method = "LiMcLeod", nlags, legend = TRUE,
-                    main = "Acf test",
-                    ...){
-              .plot.acf.test(x = x, main = main, ...)
-          }
-          )
-
-setMethod("plot", c(x = "SamplePartialAutocorrelations", y = "missing"),
-          function (x, y,
-                    # data, method = "LiMcLeod", nlags, legend = TRUE,
-                    main = "Pacf test",
-                    ...){
-              .plot.acf.test(x = x, main = main, ...)
-          }
-          )
 
 .cilines <- function(x, y, type = "l", col = "blue", lty = 2, ...){
     lines(x, y[ , 1], type = type, col = col, lty = lty, ...)
@@ -1112,7 +1121,40 @@ setMethod("plot", c(x = "SamplePartialAutocorrelations", y = "missing"),
     invisible()
 }
 
-acfg <- function(model, maxlag){
+setMethod("plot", c(x = "SampleAutocorrelations", y = "matrix"),
+          function (x, y, main = "Acf test", ...){
+
+              .ciplot(x = y,
+                    lag_0 = FALSE, ## ylim = c(-1, 1),
+                    main = main,
+                    ## ci.col = "blue", ci.lty = 2,
+                    ## xlab = colnames(x)[1],
+                    ## ylab = "Estimate & CI",
+                    ## ann = TRUE,
+                    ...)
+              invisible()
+          }
+          )
+
+setMethod("plot", c(x = "SampleAutocorrelations", y = "missing"),
+          function (x, y,
+                    # data, method = "LiMcLeod", nlags, legend = TRUE,
+                    main = "Acf test",
+                    ...){
+              .plot.acf.test(x = x, main = main, ...)
+          }
+          )
+
+setMethod("plot", c(x = "SamplePartialAutocorrelations", y = "missing"),
+          function (x, y,
+                    # data, method = "LiMcLeod", nlags, legend = TRUE,
+                    main = "Pacf test",
+                    ...){
+              .plot.acf.test(x = x, main = main, ...)
+          }
+          )
+
+acfOfSquaredArmaModel <- function(model, maxlag){
     ar <- if(is.null(model$ar)) numeric(0) else model$ar
     arsq <- - coef(polynom(c(1, - ar))^2)[-1]
     masq <-   coef(polynom(c(1,   model$ma))^2)[-1]
@@ -1122,10 +1164,10 @@ acfg <- function(model, maxlag){
 }
 
 ## naive implementation
-wg <- function(model, maxlag){
+nvcovOfAcf <- function(model, maxlag){
     R <- autocovariances(model, maxlag = maxlag)
     r <- R / R[0]
-    Rg <- acfg(model, maxlag = 2 * maxlag)
+    Rg <- acfOfSquaredArmaModel(model, maxlag = 2 * maxlag)
 
     res <- matrix(NA_real_, nrow = maxlag, ncol = maxlag)
     for(k in 1:maxlag){
@@ -1138,7 +1180,7 @@ wg <- function(model, maxlag){
     res / R[0]^2
 }
 
-wma <- function(acf, ma, maxlag){
+nvcovOfAcfBD <- function(acf, ma, maxlag){
     ## eq. 7.2.6. BD, p. 222
     res <- matrix(NA_real_, nrow = maxlag, ncol = maxlag)
     for(j in 1:maxlag){

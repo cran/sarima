@@ -1,6 +1,14 @@
 \name{VirtualMonicFilter-class}
 \Rdversion{1.1}
 \docType{class}
+
+\alias{BJ-class}
+\alias{SP-class}
+\alias{BD-class}
+%\alias{modelCoef,VirtualFilterModel,BJ-method}
+%\alias{modelCoef,VirtualFilterModel,SP-method}
+%\alias{modelCoef,VirtualFilterModel,BD-method}
+
 \alias{VirtualMonicFilter-class}
 \alias{VirtualBJFilter-class}
 \alias{VirtualSPFilter-class}
@@ -11,6 +19,7 @@
 \alias{VirtualPartialAutocovarianceModel-class}
 \alias{VirtualPartialAutocorelationModel-class}
 
+\alias{VirtualIntegratedModel-class}
 \alias{VirtualSarimaModel-class}
 \alias{VirtualImaModel-class}
 
@@ -18,6 +27,7 @@
 \alias{VirtualArmaModel-class}
 
 \alias{VirtualAutocovarianceSpec-class}
+\alias{VirtualMonicFilterSpec-class}
 
 \alias{VirtualWhiteNoiseModel-class}
 
@@ -81,7 +91,7 @@
 
   This page exists only to remind me which classes do not have
   documentation yet. It exists to avoid cluttering the report from 'R
-  CMD check' during early stages of development. 
+  CMD check' during early stages of development.
 
 }
 \section{Methods}{
@@ -90,9 +100,7 @@ No methods defined with class "VirtualMonicFilter" in the signature.
 %\references{
 %%%  ~~put references to the literature/web site here~~
 %}
-%\author{
-%%%  ~~who you are~~
-%}
+\author{Georgi N. Boshnakov}
 %\note{
 %%%  ~~further notes~~
 %}

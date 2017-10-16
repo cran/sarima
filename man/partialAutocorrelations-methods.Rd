@@ -26,4 +26,5 @@
 %%  ~~describe this method here~~
 }
 }}
+\author{Georgi N. Boshnakov}
 \keyword{methods}

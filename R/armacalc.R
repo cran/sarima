@@ -4,7 +4,11 @@
 armaccf_xe <- function(model, lag.max = 1){
     phi <- model$ar
     theta <- model$ma
+        ## 2017-10-16 accept also model$sigma2
+        ##     todo: eventually remove model$sigmasq
     sigmasq <- model$sigmasq
+    if(is.null(sigmasq))
+        sigmasq <- model$sigma2
 
     p <- length(phi)
     q <- length(theta)
@@ -51,7 +55,12 @@ armaacf <- function(model, lag.max, compare = FALSE){
     res <- acrf * R0
 
     if(compare){
-        res2 <- tacvfARMA(model$ar, - model$ma, lag.max, model$sigmasq)
+        ## 2017-10-16 accept also model$sigma2
+        ##     todo: eventually remove model$sigmasq
+        sigma2 <- model$sigmasq
+        if(is.null(sigma2))
+            sigma2 <- model$sigma2
+        res2 <- tacvfARMA(model$ar, - model$ma, lag.max, sigma2)
         ## zap small (relative to maximum before differencing) differences
         zappeddif <- zapsmall(c(max(res, res2), res - res2))[-1]
 

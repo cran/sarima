@@ -47,4 +47,6 @@ plot(x.acf, ylim.fac = 1.5)
 plot(x.acf, data = x, ylim.fac = 1.5)
 plot(x.acf, data = x, ylim = c(NA, 1))
 }
+\author{Georgi N. Boshnakov}
 \keyword{methods}
+\keyword{hplot}

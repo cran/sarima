@@ -5,6 +5,7 @@
 \alias{autocovariances,VirtualArmaModel-method}
 \title{Methods for function autocovariances()}
 \description{Methods for function autocovariances().}
+\author{Georgi N. Boshnakov}
 \section{Methods}{
 \describe{
 
@@ -17,3 +18,4 @@
 }
 }}
 \keyword{methods}
+\keyword{ts}

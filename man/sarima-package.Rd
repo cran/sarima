@@ -21,7 +21,7 @@
    Built:    \tab \Sexpr[stage=build]{pd$Built}\cr
    }
 
-% Commenting out for now.   
+% Commenting out for now.
 %    Index:
 %   \Sexpr[stage=build,results=rd]{paste("\\\\preformatted{", paste(if(!is.null(lb$info[[2]])) lb$info[[2]] else "No entries",collapse="\n"), "}", sep="")}
 
@@ -46,12 +46,18 @@ This is work in progress, see also the vignette(s).
 
 Maintainer: \Sexpr[stage=build]{pd$Maintainer}
 }
-%\references{
-%% bibentry:all
-%}
-% ~~ Optionally other standard keywords, one per line, from file KEYWORDS in ~~
-% ~~ the R documentation directory ~~
-\keyword{ package }
+\references{
+  \insertRef{boshnakov1996aism}{sarima}
+
+  \insertRef{BrockwellDavis1991}{sarima}
+
+  \insertRef{FrancqZakoian2010garch}{sarima}
+
+  \insertRef{Li2004diagnostic}{sarima}
+
+  \insertRef{McLeodYuKrougly2007}{sarima}
+
+}
 % \seealso{
 % ~~ Optional links to other man pages, e.g. ~~
 % ~~ \code{\link[<pkg>:<pkg>-package]{<pkg>}} ~~
@@ -80,11 +86,13 @@ x.garch
 
 ## plot methods give the CI's under H0
 plot(x.acf)
+
 ## if the data are given, the CI's under garch H0 are also given.
 plot(x.acf, data = x)
 
 ## Tests based on partial autocorrelations are also available:
 plot(x.pacf)
 plot(x.pacf, data = x)
-
 }
+\keyword{package}
+% use one of  RShowDoc("KEYWORDS")

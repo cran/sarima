@@ -17,8 +17,12 @@ whiteNoiseTest(object, h0, ...)
 }
 \details{
 
-  \code{whiteNoiseTest} carries out tests for white noise. Argument
-  \code{h0} gives a way to identify the null hypothesis.
+  \code{whiteNoiseTest} carries out tests for white noise.  The null
+  hypothesis is identified by argument \code{h0}, based on which
+  \code{whiteNoiseTest} chooses a suitable function to call.  The
+  functions implementing the tests are also available to be called
+  directly and their documentation should be consulted for further
+  arguments that are available.
 
   If \code{h0 = "iid"}, the test statistics and rejection regions can be
   use to test if the underlying time series is iid. Argument
@@ -26,7 +30,7 @@ whiteNoiseTest(object, h0, ...)
   "LiMcLeod" (default), "LjungBox", "BoxPierce".
 
   If \code{h0 = "garch"}, the null hypothesis is that the time series is
-  GARCH, see FrancqZakoian (TODO: give the reference properly!). The
+  GARCH, see Francq \& Zakoian (2010). The
   tests in this case are based on a non-parametric estimate of the
   asymptotic covariance matrix.
 
@@ -42,21 +46,26 @@ whiteNoiseTest(object, h0, ...)
   a list with component \code{test} and, if \code{ci=TRUE}, component
   \code{ci}.
 }
-%\references{
-%%% ~put references to the literature/web site here ~
-%}
-%\author{
-%%%  ~~who you are~~
-%}
-%\note{
-%%%  ~~further notes~~
-%}
+\references{
+  \insertRef{FrancqZakoian2010garch}{sarima}
+
+  \insertRef{Li2004diagnostic}{sarima}
+
+}
+\author{Georgi N. Boshnakov}
+
+\note{
+  Further methods will be added in the future.
+}
 %
 %%% ~Make other sections like Warning with \section{Warning }{....} ~
 %
-%\seealso{
-%%% ~~objects to See Also as \code{\link{help}}, ~~~
-%}
+\seealso{
+  \code{\link{acfGarchTest}} (\code{h0 = "garch"}),
+  \code{\link{acfIidTest}} (\code{h0 = "iid"});
+
+  \code{\link{acfMaTest}}
+}
 \examples{
 n <- 5000
 x <- sarima:::rgarch1p1(n, alpha = 0.3, beta = 0.55, omega = 1, n.skip = 100)
@@ -72,5 +81,7 @@ x.iid2
 x.garch <- whiteNoiseTest(x.acf, h0 = "garch", nlags = c(5,10,20), x = x)
 x.garch
 }
-\keyword{ ~kwd1 }
+\keyword{ts}
+\keyword{htest}
+\keyword{garch}
 % use one of  RShowDoc("KEYWORDS")

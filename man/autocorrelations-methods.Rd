@@ -11,8 +11,11 @@
 \alias{autocorrelations,SamplePartialAutocorrelations,ANY,missing-method}
 \alias{autocorrelations,SamplePartialAutocovariances,ANY,missing-method}
 \alias{autocorrelations,VirtualArmaModel,ANY,missing-method}
+\alias{autocorrelations,VirtualSarimaModel,ANY,missing-method}
 \title{Methods for function autocorrelations()}
 \description{Methods for function autocorrelations().}
+\author{Georgi N. Boshnakov}
+
 \section{Methods}{
 \describe{
 
@@ -54,5 +57,9 @@
 \item{\code{signature(x = "VirtualArmaModel", maxlag = "ANY", lag_0 = "missing")}}{{
 %%  ~~describe this method here~~
 }
+}\item{\code{signature(x = "VirtualSarimaModel", maxlag = "ANY", lag_0 = "missing")}}{{
+%%  ~~describe this method here~~
+}
 }}}
 \keyword{methods}
+\keyword{ts}
