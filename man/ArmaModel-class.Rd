@@ -15,15 +15,15 @@
 \description{Classes ArmaModel, ArModel and MaModel in package sarima.}
 \section{Objects from the Class}{
 
-  Objects can be created by calls of the form
-  \code{new("ArmaModel", ..., ar, ma, sar, sma, mean)}.
-
   Classes \code{"ArModel"} and \code{"MaModel"} are subclasses of
   \code{"ArmaModel"} with the corresponding order always zero.
-
-
-  See also \code{\link{coerce-methods}} for further ways to create
-  objects from these classes.
+  
+  The recommended way to create objects from these classes is with the
+  functions \code{\link{ArmaModel}}, \code{\link{ArModel}} and
+  \code{\link{MaModel}}. Objects can also be created by calls of the
+  form \code{new("ArmaModel", ..., ar, ma, mean, check)}.  See also
+  \code{\link{coerce-methods}} for further ways to create objects from
+  these classes.
 
 %%  ~~ describe objects here ~~
 }
@@ -68,6 +68,7 @@ Class \code{"\linkS4class{VirtualMonicFilter}"}, by class "ArmaSpec", distance 4
 %%% ~Make other sections like Warning with \section{Warning }{....} ~
 %
 \seealso{
+  \code{\link{ArmaModel}}, \code{\link{ArModel}}, \code{\link{MaModel}}, 
   \code{\link{coerce-methods}}
 }
 \examples{

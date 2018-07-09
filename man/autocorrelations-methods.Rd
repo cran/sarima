@@ -61,5 +61,7 @@
 %%  ~~describe this method here~~
 }
 }}}
+\examples{
+## see the examples for ?autocorrelations
+}
 \keyword{methods}
-\keyword{ts}

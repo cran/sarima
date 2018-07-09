@@ -15,7 +15,7 @@ fun.forecast(past, n = max(2 * length(past), 12), eps = numeric(n), pasteps, ...
   }
   \item{n}{number of forecasts to compute.}
   \item{eps}{values of the white noise sequence (for simulation  of
-    future).
+    future). Currently not used!
   }
   \item{pasteps}{past values of the white noise sequence for models with
     MA terms, 0 by default.

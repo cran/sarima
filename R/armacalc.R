@@ -72,3 +72,110 @@ armaacf <- function(model, lag.max, compare = FALSE){
     }else
         res
 }
+
+ar2Pacf <- function(phi){
+    if((p <- length(phi)) <= 1L)
+        return(phi)
+    
+    for(k in (p - 1L):1L){
+        bk <- phi[k + 1L]  # TODO: check |bk| < 1
+        phi[1L:k] <- (phi[1L:k] + bk * phi[k:1L]) / (1 - bk^2)
+    }
+    phi
+}
+
+pacf2Ar <- function(parcor){
+    p <- length(parcor)
+    if(p <= 1L)
+        return(parcor)
+    
+    ## p >= 2
+    phi <- parcor # TODO: as.vector(parcor) ?
+    for(k in 1L:(p - 1L))
+        phi[1L:k] <- phi[1L:k] - phi[k + 1L] * phi[k:1L]
+    phi
+}
+
+pacf2ArWithJacobian <- function(parcor, asis = TRUE){
+    p <- length(parcor)
+    J <- diag(p)
+    phi <- parcor
+
+    if(p >= 2)
+        for(k in 1L:(p - 1L)){
+            ## derivatives - row i contains d phi_i/d beta_j, j = 1, ...
+            ## TODO: write tests
+            ## 2017-12-21 was (last term change):
+            ##     J[1L:k, 1L:k] <- J[1L:k, 1L:k] - phi[k + 1L] * J[1L:k, k:1L]
+            J[1L:k, 1L:k] <- J[1L:k, 1L:k] - phi[k + 1L] * J[k:1L, 1L:k]
+
+            ## this should be done before updating phi[]:
+            J[1L:k, k + 1L] <- - phi[k:1L]
+
+            ## 2017-12-21 this was before the assignments to J[]:
+            phi[1L:k] <- phi[1L:k] - phi[k + 1L] * phi[k:1L]
+        }
+
+    ## TODO: think about a consistent scheme for naming:
+    if(asis)
+        list(phi = phi, J = J)
+    else
+        list(phi = - phi, J = - J)
+}
+
+hessian2vcov <- function(hessian, n, J){
+   ## Y = JX; vcov(X) = (hessian * n)^(-1) 
+   ## vcov(Y) = J vcov(X) J' = J (hessian * n)^(-1) J'
+   J %*% solve(hessian * n) %*% t(J)
+}
+
+dbind <- function(...){
+    blocks <- plain_list(...)
+    if(length(blocks) == 0)
+        return(matrix(0, 0, 0))
+                                  # d is a 2 by n matrix
+    d <- sapply(blocks, function(x){if(is.matrix(x)) dim(x) else c(length(x), 1)})
+
+    res <- matrix(0, nrow = sum(d[1, ]), ncol = sum(d[2, ]))
+    m <- n <- 0
+    for(i in seq_along(blocks)){
+        ## should work if d[1, i] = 0 and/or d[2,i] = 0
+        res[m + seq_len(d[1, i]), n + seq_len(d[2, i])] <- blocks[[i]]
+         m <- m + d[1, i]
+        n <- n + d[2, i]
+    }
+
+    res
+}
+
+diag_bind <- function(...){
+    blocks <- list()
+    d <- rapply(list(...), function(x){ 
+                               res <<- c(blocks, list(x))
+                               if(is.matrix(x)) dim(x) else c(length(x), 1)
+                           }
+               )
+    d <- matrix(d, nrow = 2)
+
+    res <- matrix(0, nrow = sum(d[1, ]), ncol = sum(d[2, ]))
+    m <- n <- 0
+    for(i in seq_along(blocks)){
+        ## should work if d[1, i] = 0 and/or d[2,i] = 0, as well
+        res[m + seq_len(d[1, i]), n + seq_len(d[2, i])] <- blocks[[i]]
+        m <- m + d[1, i]
+        n <- n + d[2, i]
+    }
+
+    res
+}
+
+plain_list <- function(...){  # , .drop.null = FALSE
+    object <- list(...)
+
+    res <- list()
+    rapply(object, function(x){ res <<- c(res, list(x)); NULL }, how = "list")
+        # if(.drop.null)
+        #     res[!sapply(res,is.null)]
+        # else
+    res
+}

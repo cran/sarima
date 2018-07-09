@@ -6,13 +6,16 @@
   the expected format.
 }
 \usage{
-modelCoef(object, convention, ...)
+modelCoef(object, convention, component, ...)
 }
 \arguments{
   \item{object}{an object.}
   \item{convention}{
     the convention to use for the return value, a character string or any
     object from a supported class, see Details.
+  }
+  \item{component}{
+    if not missing, specifies a component to extract, see Details.
   }
   \item{\dots}{not used, further arguments for methods.}
 }
@@ -35,7 +38,7 @@ modelCoef(object, convention, ...)
   If \code{convention} is not a character string, only its class is
   used. Conceptually, the value will have the format and meaning of the
   value that would be returned by a call to \code{modelCoef(obj)} with
-  =obj= from class "convention".
+  \code{obj} from class "convention".
 
   If \code{convention} is a character string, it is typically the name
   of a class. In this case \code{modelCoef(object, "someclass")} is
@@ -53,14 +56,14 @@ modelCoef(object, convention, ...)
   call to \code{modelCoef{}}.
 
   \code{modelCoef()} will signal an error if \code{object} is not
-  compatible with target (e.g. if it contains unit roots).
-  (see \code{filterCoef} if you need to expand ay multiplicative
+  compatible with \code{target} (e.g. if it contains unit roots).
+  (see \code{filterCoef} if you need to expand any multiplicative
   filters).
 
   If there is no class which returns exactly what is needed some
   additional computation may be necessary. In the above
   "ArmaModel" example we might need the coefficients in the "BJ"
-  convention, so we wpuld need to change the signs of the MA
+  convention, so we would need to change the signs of the MA
   coefficients to achieve this. Since this is a very common operation,
   a convenience feature is available. Setting \code{convention = "BJ"}
   requests ARMA coefficients with "BJ" convention. For completeness, the
@@ -86,9 +89,9 @@ modelCoef(object, convention, ...)
 %
 % %% ~Make other sections like Warning with \section{Warning }{....} ~
 %
-% \seealso{
-% %% ~~objects to See Also as \code{\link{help}}, ~~~
-% }
+\seealso{
+  code{\link{modelOrder}}
+}
 % \examples{
 % }
 % Add one or more standard keywords, see file 'KEYWORDS' in the

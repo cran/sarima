@@ -1,5 +1,5 @@
 ## Sys.setenv(R_TESTS="")
 library(testthat)
-library(sarima)
+library(testts)
 
-test_check("sarima")
+test_check("testts")

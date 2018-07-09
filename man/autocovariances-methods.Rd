@@ -17,5 +17,10 @@
 %%  ~~describe this method here~~
 }
 }}
+\seealso{
+  \code{\link{autocorrelations}}
+}
+\examples{
+## see the examples for ?autocorrelations
+}
 \keyword{methods}
-\keyword{ts}

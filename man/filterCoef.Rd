@@ -2,8 +2,7 @@
 \alias{filterCoef}
 \alias{filterOrder}
 \alias{filterPoly}
-\alias{filterPolyCoef}
-%- Also NEED an '\alias' for EACH other topic documented here.
+%\alias{filterPolyCoef}
 \title{
 
   Coefficients and other basic properties of filters
@@ -21,13 +20,12 @@ filterOrder(object, \dots)
 
 filterPoly(object, \dots)
 
-filterPolyCoef(object, lag_0 = TRUE, \dots)
+%filterPolyCoef(object, lag_0 = TRUE, \dots)
 }
-%- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{object}{object.}
   \item{convention}{convention for the sign.}
-  \item{lag_0}{if FALSE, drop the constant term.}
+  %\item{lag_0}{if FALSE, drop the constant term.}
   \item{\dots}{further arguments for methods.}
 }
 \details{
@@ -56,16 +54,17 @@ filterPolyCoef(object, lag_0 = TRUE, \dots)
 \note{
   The \code{filterXXX()} functions are somewhat low level and
   technical. They should be rarely needed in routine work.
+  The corresponding \code{modelXXX} are more flexible.
 }
 %
 %%% ~Make other sections like Warning with \section{Warning }{....} ~
 %
 \seealso{
-  \code{modelOrder},
-  \code{modelCoef},
-  \code{modePoly},
-  \code{modePolyCoef},
-  for higher level alternatives
+  \code{\link{modelOrder}},
+  \code{\link{modelCoef}},
+  \code{\link{modelPoly}},
+  \code{\link{modelPolyCoef}},
+  for the recommended higher level alternatives for models.
 }
 \examples{
 filterPoly(as(c(0.3, 0.5), "BJFilter"))   # 1 - 0.3*x - 0.5*x^2

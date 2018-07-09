@@ -1,4 +1,4 @@
-\name{nSeasons-methods}
+\name{nSeasons}
 \docType{methods}
 \alias{nSeasons}
 \alias{nSeasons-methods}

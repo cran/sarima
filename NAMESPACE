@@ -1,8 +1,19 @@
-import(methods, PolynomF, lagged)
+useDynLib(sarima, .registration=TRUE)
+importFrom(Rcpp, evalCpp)
+
+import(methods, Formula, PolynomF, lagged)
 importFrom(stats4, vcov, coef, confint, plot)
-importFrom(stats, arima.sim, filter, predict, rnorm, qnorm,
-           ts, ar, acf, pacf, acf2AR, ARMAacf, pchisq)
+
+importFrom(stats, var, sd, filter, pnorm, rnorm, qnorm, pchisq,
+           ts, ar, acf, pacf, acf2AR, ARMAacf, arima.sim,
+           formula, as.formula, terms, is.empty.model, model.frame, model.matrix, update,
+           lm, predict, printCoefmat, na.omit, poly,
+           KalmanLike, KalmanRun, KalmanForecast, makeARIMA,
+           logLik, optim)
+
 importFrom(utils, capture.output)
+importFrom(utils, as.relistable, relist)
+
 importFrom(graphics, abline, lines)
 
 importFrom(ltsa, DLAcfToAR, PredictionVariance, tacvfARMA)
@@ -12,20 +23,30 @@ importFrom(FitARMA, TacvfARMA, InformationMatrixARMA,
            ImpulseCoefficientsARMA
            ) # maybe also tccfAR
 
-importFrom(portes, LjungBox)
+# importFrom(portes, LjungBox)
 importFrom(Rdpack, rebib)
+
+# 2018-07-08 commenting out for the CRAN release
+# importFrom(FKF, fkf)
+
+import(KFAS)
 
 
 ##S3method(print, sarima)
 S3method(print, simSarimaFun)
+S3method(print, Sarima)
+
 
 S3method(summary, SarimaFilter)
 S3method(summary, SarimaSpec)
 S3method(summary, SarimaModel)
+S3method(summary, Sarima)
 
 S3method(as.list, SarimaModel)
 S3method(as.list, ArmaModel)
 S3method(as.list, ArmaSpec)
+
+S3method(predict, Sarima)
 
 
 #S3method(coef, SampleAutocorrelations)
@@ -36,7 +57,15 @@ exportClassPattern("^[^\\.]")
 
 ##exportPattern("^[[:alpha:]]+")
 export(
-    ## old
+    ## work in progress
+
+    arma_Q0gnb,
+
+    ## pacf2Ar,
+    ## pacf2ArWithJacobian,
+    sarima,
+
+    ## odl
     sim_sarima, # was: sarima.sim
     fun.forecast,
     ##print.sarima,
@@ -65,6 +94,9 @@ export(
     partialAutocovariances,
     partialAutocorrelations,
     partialVariances,
+    backwardPartialVariances,
+    partialCoefficients,
+    backwardPartialCoefficients,
 
     sigmaSq,
     modelCenter,
@@ -91,13 +123,16 @@ export(
 
     nSeasons,
 
-    arOrder,
-    maOrder,
-    arCoef,
-    maCoef,
-    arPolyCoef,
-    maPolyCoef,
+    ## arOrder,
+    ## maOrder,
+    ## arCoef,
+    ## maCoef,
+    ## arPolyCoef,
+    ## maPolyCoef,
 
+    ArmaModel,
+    ArModel,
+    MaModel,
 
     ## internal
     rgarch1p1

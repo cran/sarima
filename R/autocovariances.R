@@ -218,9 +218,13 @@ partialVariances <- function(x, ...){ # improvement? was: "predictionVariances"
 
 setGeneric("partialVariances") # was: setGeneric("predictionVariances")
 
-## setGeneric("backwardPredictionVariances")
-## setGeneric("predictionCoefficients")
-## setGeneric("backwardPredictionCoefficients")
+backwardPartialVariances <- function(x,...) stop(x)
+setGeneric("backwardPartialVariances")      # setGeneric("backwardPredictionVariances")
+
+partialCoefficients <-
+backwardPartialCoefficients <- function(x, p) stop(x)
+setGeneric("partialCoefficients")	       # setGeneric("predictionCoefficients")	       
+setGeneric("backwardPartialCoefficients")   # setGeneric("backwardPredictionCoefficients")
 
 ## TODO: set default value for maxlag?
 setMethod("autocovariances",
@@ -230,6 +234,8 @@ setMethod("autocovariances",
         co <- modelCoef(x, convention = "BJ", ...)
         sigma2 <- sigmaSq(x) # method for this how to call it:
                              #      sigmaSq(), innovationVariance(), innovationVar()?
+        if(missing(maxlag))
+            maxlag <- max(length(co$ar), length(co$ma))
                 ## TODO: compare to
                 ##       FitARMA::TacvfARMA(phi = co$ar, theta = co$theta, lag.max = maxlag)
         res <- ltsa::tacvfARMA(phi = co$ar, theta = co$ma, maxLag = maxlag,
@@ -388,6 +394,9 @@ setMethod("autocorrelations",
         ## lazy - calls the default method with "BD" convention
         co <- modelCoef(x, convention = "BD", ...)
         co$sigma2 <- 1 # for autocorrelations this doesn't matter, but may be NA in x
+        if(missing(maxlag))
+            maxlag <- max(length(co$ar), length(co$ma))
+
         autocorrelations(co, maxlag = maxlag, ...)
     }
 )
@@ -616,13 +625,13 @@ setAs("PartialVariances", "ComboAutocorrelations",
           stop("PartialVariances cannot be converted to the requested class.")
       })
 
-setMethod("modelCoef", c("VirtualAutocovariances", "missing"),
+setMethod("modelCoef", c("VirtualAutocovariances", "missing", "missing"),
           function(object){
               object@data
           }
           )
 
-setMethod("modelCoef", c("VirtualAutocovariances", "character"),
+setMethod("modelCoef", c("VirtualAutocovariances", "character", "missing"),
           function(object, convention){
               if(identical(class(object), convention))
                   ## this case is equivalent to the one-argument call()
@@ -634,35 +643,35 @@ setMethod("modelCoef", c("VirtualAutocovariances", "character"),
           }
           )
 
-setMethod("modelCoef", c("VirtualAutocovariances", "VirtualAutocovariances"),
+setMethod("modelCoef", c("VirtualAutocovariances", "VirtualAutocovariances", "missing"),
           function(object, convention){
               acvf <- modelCoef(object, "Autocovariances")
               modelCoef(acvf, convention)
           }
           )
 
-setMethod("modelCoef", c("Autocovariances", "ComboAutocovariances"),
+setMethod("modelCoef", c("Autocovariances", "ComboAutocovariances", "missing"),
           function(object, convention){
               .comboAcvf(object)
           }
           )
 
-setMethod("modelCoef", c("Autocovariances", "ComboAutocorrelations"),
+setMethod("modelCoef", c("Autocovariances", "ComboAutocorrelations", "missing"),
           function(object, convention){
               .comboAcf(object)
           }
           )
 
 # not defined since R[0] is unknown
-# setMethod("modelCoef", c("Autocorrelations", "ComboAutocovariances") )
+# setMethod("modelCoef", c("Autocorrelations", "ComboAutocovariances", "missing") )
 
-setMethod("modelCoef", c("Autocorrelations", "ComboAutocorrelations"),
+setMethod("modelCoef", c("Autocorrelations", "ComboAutocorrelations", "missing"),
           function(object, convention){
               .comboAcf(object)
           }
           )
 
-setMethod("modelCoef", c("ComboAutocovariances", "Autocovariances"),
+setMethod("modelCoef", c("ComboAutocovariances", "Autocovariances", "missing"),
           function(object, convention){
               object@data["acvf", ]
           }
@@ -670,13 +679,13 @@ setMethod("modelCoef", c("ComboAutocovariances", "Autocovariances"),
 
 ## TODO: to AR model (or filter) using $ar
 
-setMethod("modelCoef", c("ComboAutocovariances", "PartialAutocovariances"),
+setMethod("modelCoef", c("ComboAutocovariances", "PartialAutocovariances", "missing"),
           function(object, convention){
               object@data["pacvf", ]
           }
           )
 
-setMethod("modelCoef", c("ComboAutocovariances", "PartialVariances"),
+setMethod("modelCoef", c("ComboAutocovariances", "PartialVariances", "missing"),
           function(object, convention){
               object@data["sigma2", ]
           }
@@ -684,14 +693,14 @@ setMethod("modelCoef", c("ComboAutocovariances", "PartialVariances"),
 
 
 ## acvf to acf etc.
-setMethod("modelCoef", c("ComboAutocovariances", "VirtualAutocovariances"),
+setMethod("modelCoef", c("ComboAutocovariances", "VirtualAutocovariances", "missing"),
           function(object, convention){
               acvf <- modelCoef(object, "Autocovariances")
               modelCoef(acvf, convention)
           }
           )
 
-setMethod("modelCoef", c("ComboAutocorrelations", "Autocorrelations"),
+setMethod("modelCoef", c("ComboAutocorrelations", "Autocorrelations", "missing"),
           function(object, convention){
               object@data["acf", ]
           }
@@ -699,27 +708,27 @@ setMethod("modelCoef", c("ComboAutocorrelations", "Autocorrelations"),
 
 ## TODO: to AR model (or filter) using $ar
 
-setMethod("modelCoef", c("ComboAutocorrelations", "PartialAutocorrelations"),
+setMethod("modelCoef", c("ComboAutocorrelations", "PartialAutocorrelations", "missing"),
           function(object, convention){
               object@data["pacf", ]
           }
           )
 
 ## need class StandardizedPartialVariances
-## setMethod("modelCoef", c("ComboAutocorrelations", "StandardizedPartialVariances"),
+## setMethod("modelCoef", c("ComboAutocorrelations", "StandardizedPartialVariances", "missing"),
 ##           function(object, convention){
 ##           object@data["stdsigma2", ]
 ##       }
 ##       )
 
-setMethod("modelCoef", c("Autocovariances", "Autocorrelations"),
+setMethod("modelCoef", c("Autocovariances", "Autocorrelations", "missing"),
           function(object, convention){
               co <- object[] # or modelCoef(object) - no need for such generality?
               co / co[1]        # TODO: modify to work in multivariate case
           }
           )
 
-setMethod("modelCoef", c("Autocovariances", "PartialAutocorrelations"),
+setMethod("modelCoef", c("Autocovariances", "PartialAutocorrelations", "missing"),
           function(object, convention){
                     # alternatively, obtain them from combo (which uses ltsa::DLAcfToAR;
                     # using here acf2AR; compare to combo during testing.
@@ -730,7 +739,7 @@ setMethod("modelCoef", c("Autocovariances", "PartialAutocorrelations"),
           )
 
 ## same as for "Autocovariances"
-setMethod("modelCoef", c("Autocorrelations", "PartialAutocorrelations"),
+setMethod("modelCoef", c("Autocorrelations", "PartialAutocorrelations", "missing"),
           function(object, convention){
               co <- object@data # or modelCoef(object) - no need for such generality?
               ar.all <- acf2AR(co) # all partial prediction coef's (YW)
@@ -738,7 +747,7 @@ setMethod("modelCoef", c("Autocorrelations", "PartialAutocorrelations"),
           }
           )
 
-setMethod("modelCoef", c("PartialAutocorrelations", "Autocorrelations"),
+setMethod("modelCoef", c("PartialAutocorrelations", "Autocorrelations", "missing"),
           function(object, convention){
                   # 2016-11-24 was:
                   #     pacf <- object@data
@@ -753,9 +762,9 @@ setMethod("modelCoef", c("PartialAutocorrelations", "Autocorrelations"),
           )
 
 ##not available on purpose
-##setMethod("modelCoef", c("Autocorrelations", "PartialAutocovariances"))
+##setMethod("modelCoef", c("Autocorrelations", "PartialAutocovariances", "missing"))
 
-setMethod("modelCoef", c("PartialAutocovariances", "PartialAutocorrelations"),
+setMethod("modelCoef", c("PartialAutocovariances", "PartialAutocorrelations", "missing"),
           function(object, convention){
               pacr <- object[] / object[0] # TODO: currently scalar only
           }

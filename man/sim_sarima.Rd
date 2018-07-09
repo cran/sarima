@@ -146,4 +146,5 @@ x <- sim_sarima(n=144, model=list(ar=c(1.2, -0.8), ma=0.4, sar=0.3, sma=0.7,
                                   iorder=1, siorder=1, nseasons=12))
 }
 \keyword{ts}
-\keyword{datagen}
+\keyword{simulation}
+%\keyword{datagen}

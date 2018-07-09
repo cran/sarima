@@ -333,14 +333,14 @@ sarima.f <- function(past = numeric(length(ar)),
 fun.forecast <- function(  past
                          , n=max(2*length(past),12)
                          #, trend = numeric(n)
-                         , eps = numeric(n)
+                         , eps = numeric(n)    ## TODO: this argument is not used!
                          , pasteps
                          , ...
                          ){
     ## model <- sarima.mod(...)
     sarima <- new("SarimaModel", ...)
 
-    co <- filterCoef(sarima, new("ArmaFilter"))
+    co <- filterCoef(sarima, "BD")
     ar = co$ar
     ma = co$ma
     center = sarima@center

@@ -3,12 +3,17 @@
 \alias{autocovariances}
 \alias{partialAutocorrelations}
 \alias{partialAutocovariances}
+\alias{partialCoefficients}
 \alias{partialVariances}
+\alias{backwardPartialCoefficients}
+\alias{backwardPartialVariances}
 \title{Compute autocorrelations and related quantities}
 \description{
 
   Generic functions for computation of autocorrelations,
-  autocovariances and related quantities.
+  autocovariances and related quantities. The idea is to free the user
+  from the need to look for specific functions that compute the desired
+  property for their object.
 
 }
 \usage{
@@ -62,10 +67,10 @@ partialVariances(x, \dots)
 %\note{
 %%%  ~~further notes~~
 %}
-%\seealso{
-%  \code{\link{autocorrelations-methods}},
-%  \code{\link{autocovariances-methods}}
-%}
+\seealso{
+  \code{\link{armaccf_xe}},
+  \code{\link{armaacf}}
+}
 \examples{
 v1 <- rnorm(100)
 autocorrelations(v1)
@@ -90,5 +95,4 @@ partialAutocorrelations(AirPassengers, maxlag = 6)
 partialAutocovariances(AirPassengers, maxlag = 6)
 partialVariances(AirPassengers, maxlag = 6)
 }
-\keyword{methods}
 \keyword{ts}

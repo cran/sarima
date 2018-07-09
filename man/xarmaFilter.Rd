@@ -170,5 +170,4 @@ pred2 <- xarmaFilter(model1, x = ap, whiten = FALSE)
 pred2 <- pred2[-(1:13)]
 all(pred1 == pred2) ##TRUE
 }
-\keyword{filter}
 \keyword{ts}

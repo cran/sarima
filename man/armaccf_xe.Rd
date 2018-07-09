@@ -122,6 +122,7 @@ autocovariances(armalist, maxlag = 10)
 mo <- new("ArmaModel", ar = phi, ma = theta, sigma2 = sigma2)
 autocovariances(mo, maxlag = 10)
 }
-\keyword{acf}
+\keyword{ts}
+\keyword{arma}
 % use one of  RShowDoc("KEYWORDS")
 
