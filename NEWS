@@ -1,3 +1,9 @@
+Changes in Version 0.7-3 (CRAN)
+
+   - dealt with 'valgrind' warnings.
+
+
+
 Changes in Version 0.7-2 (CRAN)
 
    - this is an emergency release to avoid the package being archived on CRAN

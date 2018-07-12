@@ -1,8 +1,8 @@
 Package: sarima
 Type: Package
 Title: Simulation and Prediction with Seasonal ARIMA Models
-Version: 0.7.2
-Date: 2018-07-09
+Version: 0.7.3
+Date: 2018-07-12
 Authors@R: c( person(given = c("Georgi", "N."), 
                      family = "Boshnakov", 
                      role = c("aut", "cre"), 
@@ -32,9 +32,9 @@ Collate: RcppExports.R utils.R generics.R filterClasses.R
 LinkingTo: Rcpp, RcppArmadillo
 RoxygenNote: 6.0.1
 NeedsCompilation: yes
-Packaged: 2018-07-09 08:44:58 UTC; mcbssgb2
+Packaged: 2018-07-12 12:48:05 UTC; mcbssgb2
 Author: Georgi N. Boshnakov [aut, cre],
   Jamie Halliday [ctb]
 Maintainer: Georgi N. Boshnakov <georgi.boshnakov@manchester.ac.uk>
 Repository: CRAN
-Date/Publication: 2018-07-09 10:30:03 UTC
+Date/Publication: 2018-07-12 14:00:03 UTC

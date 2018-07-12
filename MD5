@@ -1,6 +1,6 @@
-bf685a0a3d7d8954ecaaf2219a123644 *DESCRIPTION
+b25a9a0c9efc6f2b945a61e1f2493404 *DESCRIPTION
 e4627ccd7f619a7e8e6e9b98eb4aecce *NAMESPACE
-f1100985cd2538e9147975d9d3e7b12c *NEWS
+25049d0a1fcf9646db07101d57821195 *NEWS
 44fef13c4358a67d8dbf80420b6bca67 *R/RcppExports.R
 25516219f7cc79bd79110a7d2e4f8ba5 *R/arma_Q0dotdotstats.R
 84c217a78c33b4a1f91a338c54ea5b4f *R/armacalc.R
@@ -14,16 +14,16 @@ f8ef4dae581af2a8a5ba73d98d7f9c8f *R/modelClasses.R
 d8591238902e2e811edff00a691d90b3 *R/utils.R
 ca7745fc369fd0d87fe7b7a8d60f67ba *R/wrapKFAS.R
 4919b1db4546585569b88b7a0379ca66 *TODO
-cf313c615e88005a93fb1983eb4c8843 *build/partial.rdb
+26c8e16d9511033ec25bc01a7c9a8dfc *build/partial.rdb
 aec4324512cc513708cd8a1c1c78af7d *build/vignette.rds
 1bf245dd1a59b6c82f28d41261745899 *inst/REFERENCES.bib
 253af328915d3d61a6e1aa0f2571d08a *inst/auto/REFERENCES.el
 d90063f14c1e2ecd7ca6cc80b79bf1d8 *inst/doc/garch_tests_example.R
 16ad1725b185f4a8cb8c0211fc6aa56d *inst/doc/garch_tests_example.Rnw
-d0d33720f89cb47887a83b9920dc5540 *inst/doc/garch_tests_example.pdf
+69e653b7a4bfe999dc78a2e6fa2a6bb7 *inst/doc/garch_tests_example.pdf
 af1343578442997658fa47f9b6b0549f *inst/doc/white_noise_tests.R
 0eceafe6ad7ca6a225fb304a4ce7f6ad *inst/doc/white_noise_tests.Rnw
-593c99c38fd4a0db17a02af2e7de892d *inst/doc/white_noise_tests.pdf
+d22cb2eec9afbfa619c388f253abd6dc *inst/doc/white_noise_tests.pdf
 bd973890e8d9a66c5d3390781be3e853 *man/ArmaModel-class.Rd
 b4797dc7fa6c5f7ac2a051e896dd6c0b *man/ArmaModel.Rd
 7ddfc740330f9bc8c1b91675aeef372a *man/InterceptSpec-class.Rd
@@ -73,7 +73,7 @@ ec6fc74ad998f89f1a5f10acca0e7554 *man/whiteNoiseTest.Rd
 4d751a816a417548d9de308ba62c3ba7 *src/Makevars
 4d751a816a417548d9de308ba62c3ba7 *src/Makevars.win
 ede4211d7ef5c504133c45908c7ff41b *src/RcppExports.cpp
-1cebe0e2141009cb13733730d364ec47 *src/arimaQ0.cpp
+2ae93840ac4f8057f590b95ce93f045e *src/arimaQ0.cpp
 8280dfbff829f4a632bf603f9a85c2b3 *src/utils.cpp
 58f422e1f8fbcd14dc6cb8242cf8200d *tests/testthat.R
 bd72261f451509aefafb96cf5a8271ae *tests/testthat/arma0_fit.RDS
