@@ -115,11 +115,14 @@ model2filter <- function(model){
        model <- do.call("new", c(list("SarimaModel"), model))
 
     co <-  modelCoef(model, "ArmaModel")
+    n_ur <- nUnitRoots(model)
 
     list(ar = co$ar, ma = co$ma,      # get 'ar' and 'ma' from 'co'
          sigma2    = model@sigma2,    # the rest from 'model'; could use sigmaSq(model), etc.
          center    = model@center,
-         intercept = model@intercept)
+         intercept = model@intercept,
+         n_ur = n_ur  # 2018-07-28 new component
+         )
 }
 
 ## helper function - ensure that the argument is a list with components
@@ -239,12 +242,23 @@ prepareSimSarima <- local({
         if(intercept != 0)
             ctt <- ctt + intercept
 
-        flag.center <- mu == 0
+        flag.center <- mu != 0
         n0 <- n
         rand.gen0 <- match.fun(rand.gen)
 
+        ## 2018-07-28 krapka - for the case when no unit roots and no initial values
+        ##            => generate initial values      
+        flag.stat.init.values <- filtmodel$n_ur == 0  && from == 1 # 2018-07-28
+        if(flag.stat.init.values){
+            mpq <- max(p,q)  ## TODO: what  if mpq = 0?
+            acv <- autocovariances(filtmodel[c("ar", "ma", "sigma2")], maxlag = mpq)
+            partial_sds <- sqrt(.comboAcvf(acv, "psigma2"))[-1]
+            partial_coefs <- acf2AR(acv[])
+        }
 
-        ## TODO: tryabat po-palna proverka na razmernostite!
+       
+
+        ## TODO: tryabva po-palna proverka na razmernostite!
 
         ## TODO: drugi varianti, kontrolirani s argument or otherwise;
         ##      e.g., use separate functions instead of conditionals
@@ -253,19 +267,34 @@ prepareSimSarima <- local({
                 rand.gen <- rand.gen0
             nx <- length(x)
 
+
             ## simulate (standardised) innovations and multiply by sigma
             eps.main <- sigma * rand.gen(n.start + n, ...)
-            eps <- c(eps[1:(from-1)], eps.main)
+            eps <- if(from > 1) # 2018-07-28 added if()
+                       c(eps[1:(from-1)], eps.main)
+                   else
+                       eps.main
 
             ## TODO: may need to modify x if n != n0
 
+            if(flag.stat.init.values){ # TODO: needs more thought
+                x[1:mpq] <- partial_sds * eps[1:mpq]
+                if(mpq > 1){
+                    for(i in 2:mpq){
+                        x[i] <- x[i] + sum(x[1:(i-1)] * partial_coefs[i-1, 1:(i-1)])
+                    }
+                }
+                x[1:mpq] <- x[1:mpq] + mu # since mu will be subtracted below
+            }
+            
+
             y <- if(flag.center)
-                     x
-                 else
                      x - mu
+                 else
+                     x
 
             y <- coreXarmaFilter(x = y, eps = eps, ar = ar, ma = ma, p = p, q = q, # n = n,
-                                 # from = from, TODO: temporary commenting out
+                                 # from = from, TODO: temporary commenting out (v. 0.4-5)
                                  intercept = ctt )
 
             x[from:nx] <-
@@ -274,7 +303,12 @@ prepareSimSarima <- local({
                 else
                     y[from:nx]
 
-            x[-(1:n.drop)] # TODO: keep the class of x?
+#browser()
+            if(n.drop > 0) # 2018-07-28 added if()
+                x[-(1:n.drop)] # TODO: keep the class of x?
+            else
+                x              # TODO: but this branch will keep it!
+            
         }
         class(f) <- "simSarimaFun"
         f
@@ -333,7 +367,7 @@ sarima.f <- function(past = numeric(length(ar)),
 fun.forecast <- function(  past
                          , n=max(2*length(past),12)
                          #, trend = numeric(n)
-                         , eps = numeric(n)    ## TODO: this argument is not used!
+                         , eps = numeric(n)
                          , pasteps
                          , ...
                          ){

@@ -1,3 +1,18 @@
+# Changes in Version 0.7-5
+
+* manually incorporated or noted changes from Jamie's 0.7.4.9001 dated 2018-08-17.
+
+  - 
+
+Changes in Version 0.7-4
+
+   - dealt with 'valgrind' warnings (had missed one uninitialised warning).
+
+   - fixed a bug in prepareSimSarima() - when initial values were not supplied
+     in the stationary case, the initialisation was not correct (thanks to
+     Cameron Doyle for reporting this).
+
+
 Changes in Version 0.7-3 (CRAN)
 
    - dealt with 'valgrind' warnings.

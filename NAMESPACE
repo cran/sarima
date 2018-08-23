@@ -29,6 +29,8 @@ importFrom(Rdpack, rebib)
 # 2018-07-08 commenting out for the CRAN release
 # importFrom(FKF, fkf)
 
+importFrom(numDeriv, hessian)
+
 import(KFAS)
 
 

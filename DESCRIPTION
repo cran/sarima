@@ -1,8 +1,8 @@
 Package: sarima
 Type: Package
 Title: Simulation and Prediction with Seasonal ARIMA Models
-Version: 0.7.3
-Date: 2018-07-12
+Version: 0.7.6
+Date: 2018-08-22
 Authors@R: c( person(given = c("Georgi", "N."), 
                      family = "Boshnakov", 
                      role = c("aut", "cre"), 
@@ -20,8 +20,8 @@ Description: Functions, classes and methods for time series modelling with ARIMA
     unit circle, which can be fixed or estimated.
 Depends: FitAR, stats4
 Imports: methods, graphics, stats, utils, PolynomF (>= 1.0-0), Formula,
-        ltsa, FitARMA, lagged (>= 0.1-1), Rdpack, KFAS, Rcpp (>=
-        0.12.14)
+        ltsa, FitARMA, lagged (>= 0.2), Rdpack, KFAS, Rcpp (>=
+        0.12.14), numDeriv
 Suggests: fGarch, fImport, testthat
 RdMacros: Rdpack
 License: GPL (>= 2)
@@ -32,9 +32,9 @@ Collate: RcppExports.R utils.R generics.R filterClasses.R
 LinkingTo: Rcpp, RcppArmadillo
 RoxygenNote: 6.0.1
 NeedsCompilation: yes
-Packaged: 2018-07-12 12:48:05 UTC; mcbssgb2
+Packaged: 2018-08-22 11:35:11 UTC; mcbssgb2
 Author: Georgi N. Boshnakov [aut, cre],
   Jamie Halliday [ctb]
 Maintainer: Georgi N. Boshnakov <georgi.boshnakov@manchester.ac.uk>
 Repository: CRAN
-Date/Publication: 2018-07-12 14:00:03 UTC
+Date/Publication: 2018-08-23 04:50:06 UTC

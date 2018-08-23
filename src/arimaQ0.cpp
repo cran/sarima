@@ -25,7 +25,7 @@ arma::mat arma_Q0gnb0(const arma::colvec & phi, const arma::colvec & theta,
   if(p > 0)
     rphi(span(0, p - 1)) = phi;
   
-  arma::colvec onetheta(r);
+  arma::colvec onetheta(r, fill::zeros);
   onetheta(0) = 1;
   if(q > 0)
     onetheta(span(1, q)) = theta;
