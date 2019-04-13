@@ -5,5 +5,7 @@
     "BrockwellDavis1991"
     "FrancqZakoian2010garch"
     "Li2004diagnostic"
-    "McLeodYuKrougly2007")))
+    "McLeodYuKrougly2007"
+    "kokoszka2011nonlinearity"))
+ :bibtex)
 
