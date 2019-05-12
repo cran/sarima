@@ -1,4 +1,10 @@
-# sarima 0.8.0
+# sarima 0.8.1 (CRAN)
+
+- relaxed some comparisons in the tests, to account for additional platforms, such as
+  Open-BLAS on CRAN. 
+  
+
+# sarima 0.8.0 (CRAN)
 
 * new test for GARCH-type noise based on Kokoszka and Politis result.
 
