@@ -1,7 +1,27 @@
+# sarima 0.8.2 (CRAN)
+
+- import again FKF (support for it was removed when FKF was temporarily
+  archived on CRAN).
+
+- removed developers' comments that had been accidentally left in a vignette.
+
+- removed an erroneous `rev()` from the garch tests vignette.
+
+- added new tests and fixed several bugs in the process.
+
+- the show method for class "ArmaModel" now returns NULL. The previous
+  return value was spooking "pkgdown::build_site()" resulting in the error:
+```
+Error in UseMethod("replay_html", x) : 
+  no applicable method for 'replay_html' applied to an object of class "c('double', 'numeric')"
+
+```
+
+
 # sarima 0.8.1 (CRAN)
 
-- relaxed some comparisons in the tests, to account for additional platforms, such as
-  Open-BLAS on CRAN. 
+- relaxed numerical comparisons in some tests, to account for additional
+  platforms, such as Open-BLAS, recently activated for checks on CRAN.
   
 
 # sarima 0.8.0 (CRAN)

@@ -144,11 +144,11 @@ setMethod("show", signature(object = "SamplePartialVariances"),
           )
 
 .basecfclass2S4 <- function(x, r0){
-    stopifnot(class(x) == "acf")
+    stopifnot(inherits(x, "acf")) # 2020-02-29 was: stopifnot(class(x) == "acf"), similarly below
 
     lagged <- Lagged(x) # Lagged knows how to interpret "acf" objects
     if(!missing(r0))
-        lagged[0] <- if(class(r0) == "acf") r0$acf[1, , ] else r0
+        lagged[0] <- if(inherits(r0, "acf")) r0$acf[1, , ] else r0
 
     data <- lagged[]
     n <- x$n.used
@@ -236,7 +236,8 @@ partialAutocorrelations <- function(x, maxlag, lag_0 = TRUE, ...){
             ## TODO: this may fail if 'x' doesn't contain info about autocovariances.
             ##    Maybe just put NA instead?
             wrk <- autocovariances(x, maxlag = 0, ...)
-            res <- as(obj, "FlexibleLagged")
+            ## BUGFIX: was: res <- as(obj, "FlexibleLagged")
+            res <- new("FlexibleLagged", data = pacr)
             res[[0]] <- wrk[[0]]
             res
     }
@@ -457,7 +458,10 @@ setMethod("autocorrelations",
                      else
                          new("Autocorrelations", data = acr)
               if(!missing(maxlag))
-                  res@data <- res[0:maxlag]     # may introduce NA's
+                  ## BugFix 2020-02-29 was: res@data <- res[0:maxlag]
+                  ##     TODO: needs more testing
+                  res@data <- Lagged(res[0:maxlag])     # may introduce NA's
+
               res
           }
           )
@@ -481,7 +485,7 @@ setMethod("autocorrelations",
     signature(x = "VirtualSarimaModel", maxlag = "ANY", lag_0 = "missing"),
     function (x, maxlag, ...)
     {
-        arma <- as(x, "ArmaModel") # should give error if x is non-sttionary
+        arma <- as(x, "ArmaModel") # should give error if x is non-stationary
         autocorrelations(arma, maxlag = maxlag, ...)
     }
 )
@@ -502,13 +506,16 @@ setMethod("partialAutocorrelations",
           signature(x = "mts", maxlag = "ANY", lag_0 = "missing"),
           function (x, maxlag, ...){             # TODO: check what definition they use, etc.
               wrk <- if(missing(maxlag))
-                  pacf(x, plot = FALSE)
-              else
-                  pacf(x, lag.max = maxlag, plot = FALSE)
+                         pacf(x, plot = FALSE)
+                     else
+                         pacf(x, lag.max = maxlag, plot = FALSE)
               r0 <- acf(x, lag.max = 0, plot = FALSE)
               res <- .basecfclass2S4(wrk, r0)
-              if(!missing(maxlag))
-                  res@data <- res[0:maxlag]     # may introduce NA's
+              ## 2020-02-29 not needed, maxlag has already been used above!
+              ##     Also, this is wrong since res@data has a Lagged class.
+              ## if(!missing(maxlag))
+              ##     res@data <- res[0:maxlag]     # may introduce NA's
+              res
           }
           )
 
@@ -766,7 +773,14 @@ setMethod("modelCoef", c("Autocorrelations", "ComboAutocorrelations", "missing")
 
 setMethod("modelCoef", c("ComboAutocovariances", "Autocovariances", "missing"),
           function(object, convention){
-              object@data["acvf", ]
+              ## 2020-02-29 changing this (here and at similar places) with temporary patch
+              ##     since Lagged2d objects don't have method for "character" (also "logical")
+              ## 
+              ## TODO: UPDATE PACKAGE "lagged" with such methods, if sensible!
+              ##
+              ##      object@data["acvf", ]
+              tmp <- which(rownames(object@data[]) == "acvf")
+              object@data[tmp, ]
           }
           )
 
@@ -774,13 +788,17 @@ setMethod("modelCoef", c("ComboAutocovariances", "Autocovariances", "missing"),
 
 setMethod("modelCoef", c("ComboAutocovariances", "PartialAutocovariances", "missing"),
           function(object, convention){
-              object@data["pacvf", ]
+              ## object@data["pacvf", ]
+              tmp <- which(rownames(object@data[]) == "pacvf")
+              object@data[tmp, ]
           }
           )
 
 setMethod("modelCoef", c("ComboAutocovariances", "PartialVariances", "missing"),
           function(object, convention){
-              object@data["sigma2", ]
+              ## object@data["sigma2", ]
+              tmp <- which(rownames(object@data[]) == "sigma2")
+              object@data[tmp, ]
           }
           )
 
@@ -795,7 +813,9 @@ setMethod("modelCoef", c("ComboAutocovariances", "VirtualAutocovariances", "miss
 
 setMethod("modelCoef", c("ComboAutocorrelations", "Autocorrelations", "missing"),
           function(object, convention){
-              object@data["acf", ]
+              ## object@data["acf", ]
+              tmp <- which(rownames(object@data[]) == "acf")
+              object@data[tmp, ]
           }
           )
 
@@ -803,7 +823,9 @@ setMethod("modelCoef", c("ComboAutocorrelations", "Autocorrelations", "missing")
 
 setMethod("modelCoef", c("ComboAutocorrelations", "PartialAutocorrelations", "missing"),
           function(object, convention){
-              object@data["pacf", ]
+              ## object@data["pacf", ]
+              tmp <- which(rownames(object@data[]) == "pacf")
+              object@data[tmp, ]
           }
           )
 
@@ -898,8 +920,7 @@ acfIidTest <- function(acf, n, npar = 0, nlags = npar + 1,
            "LiMcLeod" = {
                rsq <- acf[usedLags]^2
                Q <- n * cumsum(rsq) + usedLags * (usedLags + 1) / (2*n)
-           },
-           stop("Unknown method")
+           }#, stop("Unknown method")
            )
 
     Q <- Q[nlags] # keep only the requested ChiSq values
@@ -1339,6 +1360,7 @@ nvcovOfAcfBD <- function(acf, ma = NULL, maxlag){
     else
         stopifnot(ma <= max_avail_lag)
 
+    ## TODO: this may make max_avail_lag too large. Fix!
     if(max_avail_lag < 2 * maxlag + ma)
         max_avail_lag <- 2 * maxlag + ma
 
@@ -1379,9 +1401,11 @@ nvarOfAcfKP <- function(x, maxlag, center = FALSE, acfscale = c("one", "mom")){
            mom = {
                fac <- n / (n - seq_len(maxlag))
                fac * acv[-1] / den
-           },
-           ## default
-           stop("argument 'acfscale' must be one of 'one', 'mom' or abbreviation thereof")
+           }
+           ## 2020-02-29 removing this since match.arg() above catches this error.
+           ## ,
+           ## ## default
+           ## stop("argument 'acfscale' must be one of 'one', 'mom' or abbreviation thereof")
            )
 }
 

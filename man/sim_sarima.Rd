@@ -69,8 +69,13 @@ sim_sarima(model, n = NA, rand.gen = rnorm, n.start = NA, x, eps,
   model.
 
   Information about the model is printed on the screen if
-  \code{info="print"}. To suppress this, set \code{info} to any other
+  \code{info = "print"}. To suppress this, set \code{info} to any other
   value.
+
+  For multple simulations with the same (or almost the same) setup, it is
+  better to execute \code{\link{prepareSimSarima}} once and call the
+  function returned by it as many times as needed. 
+  
 }
 \value{
   an object of class "ts"
@@ -89,7 +94,7 @@ sim_sarima(model, n = NA, rand.gen = rnorm, n.start = NA, x, eps,
 % %% ~~objects to See Also as \code{\link{help}}, ~~~
 % }
 \examples{
-require("PolynomF") # package "sarima" imports it, so should not be absent here.
+require("PolynomF") # guaranteed to be available since package "sarima" imports it.
 
 x <- sim_sarima(n=144, model = list(ma=0.8))               # MA(1)
 x <- sim_sarima(n=144, model = list(ar=0.8))               # AR(1)
@@ -105,9 +110,9 @@ x <- sim_sarima(n=144, model = list(iorder=1, sigma2 = 1)) # (1-B)X_t = e_t (ran
 acf(x)
 acf(diff(x))
 
-x <-sim_sarima(n=144, model = list(iorder=2, sigma2 = 1))  # (1-B)^2 X_t = e_t
-x <-sim_sarima(n=144, model = list(siorder=1,
-                                   nseasons=12, sigma2 = 1)) # (1-B)^{12} X_t = e_t
+x <- sim_sarima(n=144, model = list(iorder=2, sigma2 = 1))  # (1-B)^2 X_t = e_t
+x <- sim_sarima(n=144, model = list(siorder=1,
+                                    nseasons=12, sigma2 = 1)) # (1-B)^{12} X_t = e_t
 
 x <- sim_sarima(n=144, model = list(iorder=1, siorder=1,
                                     nseasons=12, sigma2 = 1))
@@ -144,6 +149,9 @@ acf(x, lag.max=48)
 
 x <- sim_sarima(n=144, model=list(ar=c(1.2, -0.8), ma=0.4, sar=0.3, sma=0.7,
                                   iorder=1, siorder=1, nseasons=12))
+## use xintercept to include arbitrary trend/covariates
+sim_sarima(n = 144, model = list(sma = 0.4, ma = 0.4, sar = 0.8, ar = 0.5, 
+    nseasons = 12, sigma2 = 1), xintercept = 1:144)
 }
 \keyword{ts}
 \keyword{simulation}

@@ -107,6 +107,15 @@ sim_sarima <- function(model, n = NA, rand.gen = rnorm,
                      rand.gen = rand.gen)
     res <- fu()
 
+    ## TODO: 2020-03-02 sim_sarima is documented to return an object from class "ts"
+    ##       but doesn't!
+    ## eg:
+    ## frequency <- (environment(fu))$model$nseasons
+    ## start <- if(is.null(frequency) || frequency == 1) 1 else frequency
+    ## res <- ts(res, start = start, frequency = frequency)
+    ##
+    ## But it may be better to add arguments for the class, start, end, ...
+
     res
 }
 
@@ -132,7 +141,7 @@ model2filter <- function(model){
 
     if(missing(x) || is.null(x))
         res
-    else if(class(x) == "list"){  # TODO: use inherits()?
+    else if(inherits(x, "list")){
                         #  x[c("before", "init", "main")] would return elements named <NA>
                         #  for absent components
         if(!is.null(x$before)) res$before <- x$before

@@ -400,7 +400,8 @@ setMethod("modelCoef", c("SarimaModel", "MaModel", "missing"),
               if(length(wrk$fullarpoly) > 0)
                   stop("Model not MA-like (has non-trivial autoregressive part)")
 
-              list(ar = numeric(0), ma = coef(wrk$fullmapoly)[-1])
+              ## 2020-02-22 was: list(ar = numeric(0), ma = coef(wrk$fullmapoly)[-1])
+              list(ar = numeric(0), ma = wrk$fullmapoly)
           }
           )
 
@@ -425,9 +426,9 @@ setMethod("modelOrder", c("VirtualFilterModel", "character"),
 
 setMethod("modelOrder", c("ArmaModel", "ArFilter"),
           function(object, convention){
-          wrk <- filterOrder(object)
-          if(wrk$ma != 0)
-              stop("Non-zero moving average order")
+              wrk <- filterOrder(object)
+              if(wrk$ma != 0)
+                  stop("Non-zero moving average order")
               wrk
           }
           )
@@ -436,7 +437,7 @@ setMethod("modelOrder", c("ArmaModel", "MaFilter"),
           function(object, convention){
               wrk <- filterOrder(object)
               if(wrk$ar != 0)
-                  stop("Non-zero moving average order")
+                  stop("Non-zero autoregressive order")
               wrk
           }
           )
@@ -649,6 +650,7 @@ setMethod("show",
     function (object){
         .reportClassName(object, "InterceptSpec")
         .print_cis(object, unconditional = TRUE)
+        invisible(NULL)
     }
 )
 
@@ -667,6 +669,7 @@ setMethod("show",
         .reportClassName(object, "ArmaModel")
         .print_mis(object)
         callNextMethod()
+        invisible(NULL)
     }
 )
 setMethod("show",
