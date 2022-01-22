@@ -1,3 +1,19 @@
+# sarima 0.8.6 (CRAN)
+
+- in `tsdiag.Sarima()`, if argument `plot` specifies only one or two plots, then
+  the window is now split into 1 or 2 sub-windows, respectively, even if
+  argument `layout` is not used.
+
+- new convenience function, `se()` to compute standard errors.
+
+- `confint` methods extended and documented.
+
+- extensive changes in the documentation, including reorganisation of the
+  pkgdown site.
+
+- moved fkf and KFAS to Suggests and removed dplyr from the dependencies.
+
+
 # sarima 0.8.5 (CRAN)
 
 - new `tsdiag` method for class `Sarima` (the result of `sarima()`). The method
