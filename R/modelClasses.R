@@ -311,7 +311,7 @@ setMethod("modelCoef", c("VirtualFilterModel", "character", "missing"),
 ## convenience method for ARMA with BJ convention
 setMethod("modelCoef", c("VirtualFilterModel", "BJ", "missing"),
           function(object, convention){
-              if(class(object) == "ArmaModel")
+              if(class(object)[1] == "ArmaModel")
                  filt <- modelCoef(object)
               else{
                  filt <- modelCoef(object, convention  = "ArmaModel" )
@@ -322,7 +322,7 @@ setMethod("modelCoef", c("VirtualFilterModel", "BJ", "missing"),
 ## convenience method for ARMA with "SP" convention
 setMethod("modelCoef", c("VirtualFilterModel", "SP", "missing"),
           function(object, convention){
-              if(class(object) == "ArmaModel")
+              if(class(object)[1] == "ArmaModel")
                  filt <- modelCoef(object)
               else{
                  filt <- modelCoef(object, convention  = "ArmaModel" )
@@ -333,7 +333,7 @@ setMethod("modelCoef", c("VirtualFilterModel", "SP", "missing"),
 ## convenience method for ARMA with "BD" convention
 setMethod("modelCoef", c("VirtualFilterModel", "BD", "missing"),
           function(object, convention){
-              if(class(object) == "ArmaModel")
+              if(class(object)[1] == "ArmaModel")
                  modelCoef(object)
               else{
                      # 2018-05-30 was:
@@ -622,10 +622,10 @@ setAs("VirtualSarimaModel", "ArmaModel",
     }
 
     if(order$ar > 0)  ar <- "Phi(B)"
-    if(order$sar > 0) sar <- "Phi_s(B)"
+    if(order$sar > 0) sar <- "Phi_s(B^s)"
 
     if(order$ma > 0)  ma <- "Theta(B)"
-    if(order$sma > 0) sma <- "Theta_s(B)"
+    if(order$sma > 0) sma <- "Theta_s(B^s)"
 
     arall <- paste0(d, ds, ar, sar)
     maall <- paste0(ma, sma)
@@ -716,3 +716,162 @@ summary.SarimaModel <- function(object, ...){
     .reportClassName(object, "SarimaModel")
     summary.SarimaSpec(object)
 }
+
+as.SarimaModel <- function (x, ...) UseMethod("as.SarimaModel")
+
+as.SarimaModel.Arima <- function (x, ...){
+    order <- x$arma
+    p <- order[1]
+    q <- order[2]
+    P <- order[3]
+    Q <- order[4]
+    nseasons <- order[5]
+    d <- order[6]
+    D <- order[7]
+
+    ## TODO: include the mean (named 'intercept' in Arima objects)
+    co <- coef(x)
+    ar <- co[seq_len(p)]
+    ma <- co[p + seq_len(q)]
+    sar <- co[p + q + seq_len(P)]
+    sma <- co[p + q + P + seq_len(Q)]
+    
+    new("SarimaModel", ar = ar, ma = ma, sigma2 = x$sigma2,
+                       sar = sar, sma = sma, nseasons = nseasons,
+                       iorder = d, siorder = D)
+}
+
+## setClass("Spectrum", slots = c(freq = "numeric", spec = "numeric", model = "ANY"),
+##          contains = "function")
+
+setClass("Spectrum", slots = c(call = "call", model = "ANY"), contains = "function")
+setClass("ArmaSpectrum", contains = "Spectrum")
+
+setMethod("initialize", "ArmaSpectrum",
+          function(.Object, ar = numeric(0), ma = numeric(0), sigma2 = NA_real_, ...){
+              .Object <- callNextMethod(.Object, ...)
+              if(is.null(.Object@model))
+                  .Object@model <- ArmaModel(ar = ar, ma = ma, sigma2 = sigma2)
+              ## else
+              ##   something wrong here, easy to get inconsistencies,
+              ##   Don't document for users!
+              
+              if(is.null(body(.Object@.Data))){ # function not set, do it
+                  e <- new.env(parent = topenv())
+                  e$ar <- ar
+                  e$ma <- ma
+                  e$sigma2 <- sigma2
+                  freq <- standardize <- NULL ## otherwise 'R CMD check' complains
+                  f <- as.function(alist(freq = , standardize = TRUE,
+                                         .spdArma(ar = ar, ma = ma, sigma2 = sigma2,
+                                                  freq = freq, standardize = standardize)$spec
+                                         ), envir = e)
+                  .Object@.Data <- f
+              }
+              .Object
+          })
+
+plot.Spectrum <- function(x, y, to, from = y, n = 128, standardize = TRUE,
+                          log = NULL, main = "Spectral density", xlab = "Frequency", 
+                          ylab = NULL, ...){
+    if(missing(from))
+        from <- 0
+    if(missing(to))
+        to <- 0.5
+    if(is.null(ylab)){
+        ylab <- if(identical(log, "y"))
+                    "log(Spd)"
+                else
+                    "Spd"
+    }
+    ## else leave as is
+
+    if(standardize)
+        plot.function(x, type = "l", from = from, to = to, n = n,
+                      log = log, main = main, xlab = xlab, ylab = ylab, ...)
+    else{
+        ## f <- function(z) x(z, standardize = FALSE)
+        ## curve(f, from = from, to = to, ...)
+        curve(x(x, standardize = FALSE), from = from, to = to, n = n,
+              log = log, main = main, xlab = xlab, ylab = ylab, ...)
+    }
+}
+
+setMethod("plot", "Spectrum", plot.Spectrum)
+
+format.Spectrum <- function (x, ..., n = 128, standardize = TRUE){
+    freq <- seq(0, 0.5, length.out = n)
+    spec <- x(freq)
+
+    res <- ""
+
+    res <- c(res, "\nPeaks:")
+    max_flags <- .local_maxima(spec)
+    ma_freq <- freq[max_flags]
+    ma_spec <- spec[max_flags]
+    pma <- 1 / ma_freq
+    pma <- ifelse(is.infinite(pma), 0, pma)
+    res <- c(res, capture.output(print(cbind(freq = ma_freq, spec = ma_spec, period = pma), ...)),
+                  "")
+    
+    res <- c(res, "Troughs:\n")
+    min_flags <- .local_minima(spec)
+    mi_freq <- freq[min_flags]
+    mi_spec <- spec[min_flags]
+    pmi <- 1 / mi_freq
+    pmi <- ifelse(is.infinite(pmi), 0, pmi)
+    res <- c(res, capture.output(print(cbind(freq = mi_freq, spec = mi_spec, period = pmi), ...)),
+                  "")
+
+    p <- max(ma_spec) / min(mi_spec)
+    res <- c(res, "max peak/min trough:")
+    res <- c(res, paste0("\t", format(p, ...)))
+    res <- c(res, "")
+
+    res
+}
+
+format.ArmaSpectrum <- function (x, ..., n = 128, standardize = TRUE){
+    ar     <- environment(x@.Data)$ar
+    ma     <- environment(x@.Data)$ma
+    sigma2 <- environment(x@.Data)$sigma2
+    
+    res <- c(paste0(if(standardize) "standardized " else "",
+                    "spectral density of the following ",
+                    "ARMA(", length(ar), ",", length(ma), ") model:"),
+             paste0("  ar coef: ", 
+                    paste0(formatC(ar, zero.print = TRUE, ...), collapse = " ")),
+             paste0("  ma coef: ", 
+                    paste0(formatC(ma, zero.print = TRUE, ...), collapse = " ")),
+             paste0("  sigma2:  ", format(sigma2, ...)),
+             "")
+
+    if(standardize)
+        sigma2 <- 1
+    else if(is.na(sigma2))
+        stop("sigma2 must be non-NA when 'standardize' is FALSE")
+
+    if(length(ar) == 0 && length(ma) == 0){
+        res <- c(res, paste0("constant, equal to ", sigma2, " for all frequencies"))
+	return(res)
+    }
+
+    res <- c(res, format.Spectrum(x, ..., n = n, standardize = standardize))
+
+    res
+}
+
+print.Spectrum <- function (x, ..., n = 128, standardize = TRUE){
+    wrk <- format(x, ..., n = n, standardize = standardize)
+    cat(wrk, sep = "\n")
+    if(length(list(...)) == 0 && missing(n) && missing(standardize) )
+        plot(x)
+
+    invisible(x)
+}
+
+setMethod("show", "Spectrum", function(object){
+    cat(format(object), sep = "\n")
+    plot(object)
+    invisible(NULL)
+})
