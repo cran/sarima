@@ -1,3 +1,20 @@
+# sarima 0.9.1 (CRAN)
+
+- included instructions how to install package 'FitARMA', if it is needed.
+
+- fixed NOTEs from CRAN about escaped LaTeX specials.
+
+- added the expanded stationary AR polynomial to the output of the
+  `"SarimaModel"` method for `filterPoly` and `filterPolyCoef`. The fully
+  axpanded AR polynomial which includes also the integrated terms is availalbe
+  as before.
+
+- in `prepareSimSarima` (and hence `sim_sarima`) fixed a bug causing wrong
+  results for some combinations of parameters when initial values were
+  supplied. Also removed some parts in the documentation of these functions
+  which no longer applied. 
+
+
 # sarima 0.9 (CRAN)
 
 - new generic function `FisherInformation` giving the information matrix for

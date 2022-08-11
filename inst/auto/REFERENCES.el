@@ -2,6 +2,7 @@
  "REFERENCES"
  (lambda ()
    (LaTeX-add-bibitems
+    "BoshnakovHalliday2022parcor"
     "Godolphin2007Sarma"
     "Friedlander1984CramerRaoArma"
     "BrockwellDavis1991"
