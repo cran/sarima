@@ -11,5 +11,5 @@
     "McLeodYuKrougly2007"
     "kokoszka2011nonlinearity"
     "gardner+harvey+phillips:1980"))
- :bibtex)
+ '(or :bibtex :latex))
 

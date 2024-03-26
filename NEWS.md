@@ -1,3 +1,12 @@
+# sarima 0.9.3
+
+- removed 'FitARMA' from 'Suggests:'; it had not been needed for some time.
+
+- `tsdiag.Sarima` was sometimes presenting the menu of choices when that was not
+  needed or asked for (e.g., when `plot = 1:4` and 'layout' a two-by-two matrix),
+  a bug introduced in v0.9.2.
+
+
 # sarima 0.9.2
 
 - the 'Sarima' method for `tsdiag` now splits the window into less than 3
@@ -10,7 +19,7 @@
   specification unless essential'.
 
 
-# sarima 0.9.1 (CRAN)
+# sarima 0.9.1
 
 - included instructions how to install package 'FitARMA', if it is needed.
 
@@ -27,7 +36,7 @@
   which no longer applied. 
 
 
-# sarima 0.9 (CRAN)
+# sarima 0.9
 
 - new generic function `FisherInformation` giving the information matrix for
   fitted and theoretical models with methods for ARMA and seasonal ARMA models.
@@ -36,7 +45,7 @@
   default `stats::spectrum`.
   
 
-# sarima 0.8.6 (CRAN)
+# sarima 0.8.6
 
 - in `tsdiag.Sarima()`, if argument `plot` specifies only one or two plots, then
   the window is now split into 1 or 2 sub-windows, respectively, even if
@@ -52,7 +61,7 @@
 - moved fkf and KFAS to Suggests and removed dplyr from the dependencies.
 
 
-# sarima 0.8.5 (CRAN)
+# sarima 0.8.5
 
 - new `tsdiag` method for class `Sarima` (the result of `sarima()`). The method
   can be called also directly on the output from base R's `arima()` with
@@ -75,12 +84,12 @@
   this possible).
 
 
-# sarima 0.8.4 (CRAN)
+# sarima 0.8.4
 
 - updated a reference to avoid redirect.
 
 
-# sarima 0.8.2 (CRAN)
+# sarima 0.8.2
 
 - import again FKF (support for it was removed when FKF was temporarily
   archived on CRAN).
@@ -100,13 +109,13 @@ Error in UseMethod("replay_html", x) :
 ```
 
 
-# sarima 0.8.1 (CRAN)
+# sarima 0.8.1
 
 - relaxed numerical comparisons in some tests, to account for additional
   platforms, such as Open-BLAS, recently activated for checks on CRAN.
   
 
-# sarima 0.8.0 (CRAN)
+# sarima 0.8.0
 
 * new test for GARCH-type noise based on Kokoszka and Politis result.
 
@@ -140,14 +149,14 @@ Error in UseMethod("replay_html", x) :
   is "Rossignol2011".
 
 
-# sarima 0.7.6 (CRAN)
+# sarima 0.7.6
 
 * updated Makevars and Makevars.win to deal with a NOTE from recent tightening
   of checks on CRAN (see
   https://stat.ethz.ch/pipermail/r-package-devel/2018q3/003030.html). 
 
 
-# sarima 0.7.5
+# sarima 0.7.5 (not on CRAN)
 
 * `NEWS` becomes `NEWS.md` and uses markdown syntax. The style is loosely based
   on http://style.tidyverse.org/news.html).
@@ -158,7 +167,7 @@ Error in UseMethod("replay_html", x) :
   * Import package *numDeriv* (for `hessian()`).
 
 
-# sarima 0.7.4
+# sarima 0.7.4 (not on CRAN)
 
 * dealt with 'valgrind' warnings (had missed one uninitialised warning).
 
@@ -167,12 +176,12 @@ Error in UseMethod("replay_html", x) :
      Cameron Doyle for reporting this).
 
 
-# sarima 0.7.3 (CRAN)
+# sarima 0.7.3
 
 * dealt with 'valgrind' warnings.
 
 
-# sarima 0.7.2 (CRAN)
+# sarima 0.7.2
 
 * this is an emergency release to avoid the package being archived on CRAN
      due to the archival of a dependency.
@@ -191,7 +200,7 @@ Error in UseMethod("replay_html", x) :
 * removed package 'FKF' from Imports, since it has been archived on CRAN.
      
    
-# sarima 0.7-0 - 0.7-1
+# sarima 0.7-0 - 0.7-1 (not on CRAN)
 
 * merged branch models with master.
 
@@ -211,7 +220,7 @@ Changes in branch 'models'
      Now the tests for `armaQ0` etc are in `sarima. 
      
 
-# sarima 0.6-6
+# sarima 0.6-6 (not on CRAN)
 
 * now can request estimation of components with roots on the unit circle.
 
@@ -225,7 +234,7 @@ Changes in branch 'models'
      .cs() and .B(), respectively.
 
 
-# sarima 0.6-4 - 0.6-5
+# sarima 0.6-4 - 0.6-5 (not on CRAN)
 
 * intermediate versions, not useful for back reference (the zip file given is
      a better place to look for code before 0.6-6).
@@ -237,7 +246,7 @@ Changes in branch 'models'
      roots.
 
 
-# sarima 0.6-3
+# sarima 0.6-3 (not on CRAN)
 
 * support for tanh transformation.
 
@@ -247,7 +256,7 @@ Changes in branch 'models'
      elsewhere (e.g. to myRcpp, but haven't decided on the structure)
 
 
-# sarima 0.6-1 - 0.6-2
+# sarima 0.6-1 - 0.6-2 (not on CRAN)
 
 * Several bug fixes.
 
@@ -255,7 +264,7 @@ Changes in branch 'models'
      latest version of R. Packing up this version for a working reference. 
 
 
-# sarima 0.6-0
+# sarima 0.6-0 (not on CRAN)
 
 * included some C++ code (using Rcpp/RcppArmadilo) previously tested
      in my (private) package myRcpp.
@@ -271,13 +280,13 @@ Changes in branch 'models'
      further improvements mess things up.
 
 
-# sarima 0.5-11
+# sarima 0.5-11 (not on CRAN)
 
 * temporarily created a number of functions to call functions used
      internally by arima(), see arima.R. 
 
 
-# sarima 0.5-9
+# sarima 0.5-9 (not on CRAN)
 
 * moved temporarilly FitAR from Imports to Depends, since FitARMA can't find
      some functions from FitAR if FitARMA is not attached. (move
@@ -286,7 +295,7 @@ Changes in branch 'models'
 * further work on sarima(), saving before more meddling with the environments
      of the formulas
 
-# sarima 0.5-8
+# sarima 0.5-8 (not on CRAN)
 
 * added support for KFAS.
 
@@ -298,7 +307,7 @@ Changes in branch 'models'
 * archiving before a full scale consolidation and clean up, in case that
      messes things up.
 
-# sarima 0.5-7
+# sarima 0.5-7 (not on CRAN)
 
 * sarima() now fits XARIMAX models, in the case of the second X, using
      FKF::fkf().
@@ -307,24 +316,24 @@ Changes in branch 'models'
      parameters. 
 
 
-# sarima 0.5-6
+# sarima 0.5-6 (not on CRAN)
 
 * some consolidation of sarima(), now supports lagged variables and calls
      only sarimat(). sarima0() has been removed. the data argument of sarima()
      is processed properly (incomplete maybe).
 
-# sarima 0.5-5
+# sarima 0.5-5 (not on CRAN)
 
 * sarima() now uses the facilities of package Formula to process the model
      formulas.
 
-# sarima 0.5-4
+# sarima 0.5-4 (not on CRAN)
 
 * sarima() can now fit time regression. It currently calls sarimat() if there
      is treg argument and sarima0() otherwise.
 
 
-# sarima 0.5-3
+# sarima 0.5-3 (not on CRAN)
 
 * model formulas for SARIMA models using package Formula.
 
@@ -333,7 +342,7 @@ Changes in branch 'models'
 * packing this version before further work on sarima().
 
 
-# sarima 0.5-2 (CRAN)
+# sarima 0.5-2
 
 * plot of acf tests now uses different 'lty' so that the confidence limits
      under iid and garch nulls are visually distinguishable in black and white
@@ -352,7 +361,7 @@ Changes in branch 'models'
 * additional examples.
 
 
-# sarima 0.5-1
+# sarima 0.5-1 (not on CRAN)
 
 * SarimaModel now inherits from VirtualSarimaModel (it was inheriting from
      VirtualFilterModel. On its own, this is invisible to the user. It didn't
@@ -365,7 +374,7 @@ Changes in branch 'models'
 * further streamlining.
 
 
-# sarima 0.5-0
+# sarima 0.5-0 (not on CRAN)
 
 * exported functions related to Bartlett's formula (they were there in
      version 0.4-5, under different names).
@@ -375,7 +384,7 @@ Changes in branch 'models'
 * increasing the version number before some streamlining of class SarimaModel.
 
 
-# sarima 0.4-5 (CRAN)
+# sarima 0.4-5
 
 * moved "Lagged" to a separate package, "lagged".
 
@@ -385,37 +394,37 @@ Changes in branch 'models'
      project.
 
 
-# sarima 0.4-3 (CRAN)
+# sarima 0.4-3
 
 * first CRAN version.
 
 
-# sarima 0.3-6
+# sarima 0.3-6 (not on CRAN)
 
 * white noise tests based on acf and pacf and  corresponding plots.
 * vignette.
 
 
-# sarima 0.3-5
+# sarima 0.3-5 (not on CRAN)
 
 * revamped "Lagged": introduced Lagged2d, etc.; mixed Ops, e.g. "Lagged" +
      "vector", now work only if "vector" is of length one or multiple of the
      length of e1@data has the same length as the vector.
 
 
-# sarima 0.3-4
+# sarima 0.3-4 (not on CRAN)
 
 * removed some old commented out code from sarima.org to reduce clutter.
 * extensive changes and consolidation.
 
 
-# sarima 0.3-3
+# sarima 0.3-3 (not on CRAN)
 
 * streamlined SARIMA models and the functions based on old code.
      Keeping the old code (commented out) for reference.
 
 
-# sarima 0.3-2
+# sarima 0.3-2 (not on CRAN)
 
 * defined the classes for autocorrelations and similar.
 * autocorrelations() and similar now have a number of methods.
@@ -423,41 +432,46 @@ Changes in branch 'models'
      in VirtualMonicFilter-class.Rd.
 
 
-# sarima 0.3-0
+# sarima 0.3-0 (not on CRAN)
 
 * switched to package PolynomF (from polynom).
 * new classes for models, including ARMA and SARIMA.
 * R CMD check passes 9only a WARNING for undocumented objects and S$ methods.
 
 
-# sarima 0.2-x
+# sarima 0.2-x (not on CRAN)
 
 * added new classes, substantial extension.
 * renamed sarima.sim() to sim_sarima()
 
 
-# sarima 0.1-0
+# sarima 0.1-0 (not on CRAN)
 
 * updated and cleaned a bit the old code.
 
-# sarima 0.0-5
+
+# sarima 0.0-5 (not on CRAN)
 
 * removed argument "eps" from fun.forecast since it is ignored.
 
-# sarima 0.0-3
+
+# sarima 0.0-3 (not on CRAN)
 
 * sarima.mod now sets class "sarima" for its result.
 * print method for "sarima" class.
 
-# sarima 0.0-2
+
+# sarima 0.0-2 (not on CRAN)
 
 * inserted examples from lectures and handouts from past years.
 
-# sarima 0.0-1
+
+# sarima 0.0-1 (not on CRAN)
 
 * created documentation using the comments in the source code.
 
-# sarima 0.0-0
+
+# sarima 0.0-0 (not on CRAN)
 
 * turned atssarima.r (written in 2006-2007 for course "Applied time series")
   into a package.
