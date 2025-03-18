@@ -1,9 +1,17 @@
+# sarima 0.9.4
+
+- a test was still calling a function from 'FitARMA', conditionally but causing
+  check error on Mac/oldrel, where it seems that 'FitARMA' is still present.
+  
+- fixed a test throwing error under OPENBLAS.
+
+
 # sarima 0.9.3
 
 - removed 'FitARMA' from 'Suggests:'; it had not been needed for some time.
 
 - `tsdiag.Sarima` was sometimes presenting the menu of choices when that was not
-  needed or asked for (e.g., when `plot = 1:4` and 'layout' a two-by-two matrix),
+  needed or asked for (e.g., when `plot  = 1:4` and 'layout' a two-by-two matrix),
   a bug introduced in v0.9.2.
 
 
