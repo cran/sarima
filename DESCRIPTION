@@ -1,15 +1,15 @@
 Package: sarima
 Type: Package
 Title: Simulation and Prediction with Seasonal ARIMA Models
-Version: 0.9.4
+Version: 0.9.5
 Authors@R: c( person(given = c("Georgi", "N."), 
                      family = "Boshnakov", 
                      role = c("aut", "cre"), 
-                     email = "georgi.boshnakov@manchester.ac.uk"), 
+                     email = "georgi.boshnakov@manchester.ac.uk",
+		     comment = c(ORCID = "0000-0003-2839-346X")), 
 	      person(given = "Jamie", 
 	             family = "Halliday", 
-	             role = "aut", email = "jamie.halliday@manchester.ac.uk",
-		     comment = c(ORCID = "0000-0003-2839-346X")) )
+	             role = "aut", email = "jamie.halliday@manchester.ac.uk") )
 Description: Functions, classes and methods for time series modelling with ARIMA
     and related models. The aim of the package is to provide consistent
     interface for the user. For example, a single function autocorrelations()
@@ -36,9 +36,10 @@ Collate: RcppExports.R utils.R generics.R filterClasses.R
 LinkingTo: Rcpp, RcppArmadillo
 RoxygenNote: 7.1.1
 NeedsCompilation: yes
-Packaged: 2025-03-18 09:34:16 UTC; georgi
-Author: Georgi N. Boshnakov [aut, cre],
-  Jamie Halliday [aut] (<https://orcid.org/0000-0003-2839-346X>)
+Packaged: 2025-12-15 17:28:11 UTC; georgi
+Author: Georgi N. Boshnakov [aut, cre] (ORCID:
+    <https://orcid.org/0000-0003-2839-346X>),
+  Jamie Halliday [aut]
 Maintainer: Georgi N. Boshnakov <georgi.boshnakov@manchester.ac.uk>
 Repository: CRAN
-Date/Publication: 2025-03-18 15:20:01 UTC
+Date/Publication: 2025-12-16 06:10:20 UTC

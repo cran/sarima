@@ -1,3 +1,10 @@
+# sarima 0.9.5
+
+- fixed links that have been changed/redirected.
+
+- fixed the erroneously placed ORCID id in DESCRIPTION.
+
+
 # sarima 0.9.4
 
 - a test was still calling a function from 'FitARMA', conditionally but causing
